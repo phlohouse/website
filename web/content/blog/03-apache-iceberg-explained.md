@@ -3,7 +3,7 @@ title: "Apache Iceberg — The Table Format That Changed Everything"
 description: "Understand how Apache Iceberg enables ACID transactions, time travel, and schema evolution on your data lake."
 ---
 
-# Part 3: Apache Iceberg—The Table Format That Changed Everything
+# Part 3: Apache Iceberg - The Table Format That Changed Everything
 
 > Prerequisite: Read [Part 1: What is a Data Lakehouse?](01-intro-data-lakehouse.md) for lakehouse context.
 
@@ -17,9 +17,9 @@ description: "Understand how Apache Iceberg enables ACID transactions, time trav
 ## Prerequisites
 
 - [Part 1: What is a Data Lakehouse?](01-intro-data-lakehouse.md)
-- Optional: [Part 2: Getting Started—Setup Guide](02-setup-guide.md) to run the examples locally.
+- Optional: [Part 2: Getting Started - Setup Guide](02-setup-guide.md) to run the examples locally.
 
-In Part 1, we mentioned Iceberg as the magic ingredient. Let's understand _why_ it's such a game-changer.
+In Part 1, we introduced Iceberg as the table layer. Here's why it matters in day-to-day pipelines.
 For Git-like versioning on top of Iceberg, see [Part 4: Project Nessie Versioning](04-project-nessie-versioning.md).
 
 ## The Problem With Traditional Parquet
@@ -43,7 +43,7 @@ s3://lake/glucose-data/
 - Schema changes require rewriting all files
 - Queries must scan ALL files (no partition pruning)
 - Concurrent writes = conflicting files
-- No time travel—data is gone when you delete it
+- No time travel - data is gone when you delete it
 
 ## What Iceberg Provides
 
@@ -90,7 +90,7 @@ flowchart TB
 
 ### 1. Snapshots (Immutable Versions)
 
-Each write creates a new **snapshot**—a complete, immutable view of the table at that moment:
+Each write creates a new **snapshot** - a complete, immutable view of the table at that moment:
 
 ```python
 # In Python, using PyIceberg
@@ -137,7 +137,7 @@ Snapshot 1234567892:
     └── data/year=2024/month=10/day=02/00004.parquet → rows 101-200
 ```
 
-Why manifests? Query optimization:
+Why manifests? Query optimisation:
 
 - Scanner reads manifest, not S3 listing
 - Knows exact file count before scanning
@@ -233,7 +233,7 @@ FROM iceberg.raw.glucose_entries;  -- Current
 - 🐛 Data quality issue today? Check what you ingested yesterday
 - Audit trail: see exactly what changed and when
 - Reproducibility: re-run yesterday's analysis with yesterday's data
-- ↩️ No "undo" button needed—just query the previous snapshot
+- No "undo" button needed - just query the previous snapshot
 
 ## ACID Transactions
 
@@ -500,5 +500,5 @@ Phlo uses Iceberg to ensure:
 
 ## Next Steps
 
-- Continue with [Part 4: Project Nessie—Git-Like Versioning for Data](04-project-nessie-versioning.md).
+- Continue with [Part 4: Project Nessie - Git-Like Versioning for Data](04-project-nessie-versioning.md).
 - See how Iceberg powers dbt models in [Part 6: dbt Transformations](06-dbt-transformations.md).

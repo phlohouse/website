@@ -3,7 +3,7 @@ title: "Data Quality — Pandera Schemas and Asset Checks"
 description: "Enforce data quality at every layer with Pandera schemas, the @phlo_quality decorator, and Dagster asset checks."
 ---
 
-# Part 9: Data Quality—Pandera Schemas and Asset Checks
+# Part 9: Data Quality - Pandera Schemas and Asset Checks
 
 > Prerequisite: Complete [Part 5: Data Ingestion](05-data-ingestion.md) before applying quality checks.
 
@@ -44,11 +44,20 @@ glucose_reading = {
 
 Phlo uses validation at three points:
 
-```mermaid
-flowchart TD
-    A[API Data] -->|Pandera schema| B[DLT Staging Tables]
-    B -->|dbt tests| C[Iceberg/Postgres Marts]
-    C -->|Dagster asset checks| D[Dashboards/Alerts]
+```
+API Data
+    ↓
+[1] Ingestion: Pandera schema validation
+    ↓
+DLT Staging Tables
+    ↓
+[2] dbt Tests: Business logic validation
+    ↓
+Iceberg/Postgres Marts
+    ↓
+[3] Dagster Asset Checks: Runtime monitoring
+    ↓
+Dashboards/Alerts
 ```
 
 ## Layer 1: Pandera Schemas (Ingestion)
@@ -132,7 +141,7 @@ class FactGlucoseReadings(DataFrameModel):
     - Proper timestamp formatting
     - Valid direction indicators
     - Time dimension fields (hour, day of week)
-    - Glucose categorization
+    - Glucose categorisation
     """
 
     entry_id: str = Field(
@@ -163,7 +172,7 @@ class FactGlucoseReadings(DataFrameModel):
     glucose_category: str = Field(
         isin=["hypoglycemia", "in_range", "hyperglycemia_mild", "hyperglycemia_severe"],
         nullable=False,
-        description="Categorized glucose level based on ADA guidelines",
+        description="Categorised glucose level based on ADA guidelines",
     )
 
     is_in_range: int = Field(
@@ -580,7 +589,7 @@ def nightscout_glucose_quality_check(context, trino: TrinoResource) -> AssetChec
 
 ### Check Parameters in Detail
 
-**NullCheck with allow_threshold:**
+NullCheck with allow_threshold:
 
 ```python
 # Strict: no nulls allowed
@@ -590,7 +599,7 @@ NullCheck(columns=["sgv", "timestamp"])
 NullCheck(columns=["device"], allow_threshold=0.01)
 ```
 
-**RangeCheck:**
+RangeCheck:
 
 ```python
 # Both bounds
@@ -603,7 +612,7 @@ RangeCheck(column="price", min_value=0)
 RangeCheck(column="percentage", max_value=100)
 ```
 
-**FreshnessCheck:**
+FreshnessCheck:
 
 ```python
 # Data must be less than 2 hours old
@@ -613,7 +622,7 @@ FreshnessCheck(timestamp_column="timestamp", max_age_hours=2)
 FreshnessCheck(timestamp_column="created_at", max_age_hours=24)
 ```
 
-**UniqueCheck:**
+UniqueCheck:
 
 ```python
 # Single column unique
@@ -623,7 +632,7 @@ UniqueCheck(columns=["id"])
 UniqueCheck(columns=["user_id", "timestamp"])
 ```
 
-**CustomSQLCheck for complex rules:**
+CustomSQLCheck for complex rules:
 
 ```python
 # "data" is a placeholder for the table/dataframe passed via the @phlo_quality decorator's table parameter
@@ -651,12 +660,12 @@ CustomSQLCheck(
 )
 ```
 
-**blocking parameter:**
+blocking parameter:
 
 - `blocking=True` (default): Failed checks prevent downstream assets from running
 - `blocking=False`: Failed checks log warnings but don't block execution
 
-**warn_threshold:**
+warn_threshold:
 
 - Set to `0.0` for strict mode (any failure = warning)
 - Set to `0.1` to allow 10% of checks to fail before warning
@@ -705,11 +714,27 @@ Both approaches are valid and complement each other. The decorator handles commo
 
 ### Why Three Layers?
 
-```mermaid
-flowchart TD
-    A[Layer 1: Pandera] -->|Type correctness, constraints| B[Layer 2: dbt Tests]
-    B -->|Business logic, cross-table consistency| C[Layer 3: Dagster Asset Checks]
-    C -->|Production quality, freshness| D[Validated Pipeline]
+```
+┌─────────────────────────────────────┐
+│ Layer 1: Pandera (Ingestion)        │
+│ ✓ Type correctness                  │
+│ ✓ Basic constraints (range, enum)   │
+│ ✓ Prevent bad data entering system  │
+└─────────────────────────────────────┘
+          ↓ (only clean data passes)
+┌─────────────────────────────────────┐
+│ Layer 2: dbt Tests (Transformation) │
+│ ✓ Business logic rules              │
+│ ✓ Cross-table consistency           │
+│ ✓ Catch issues during transform     │
+└─────────────────────────────────────┘
+          ↓ (only valid transforms apply)
+┌─────────────────────────────────────┐
+│ Layer 3: Asset Checks (Runtime)     │
+│ ✓ Production data quality           │
+│ ✓ Anomaly detection                 │
+│ ✓ Freshness monitoring              │
+└─────────────────────────────────────┘
 ```
 
 Each layer catches different issues:
@@ -748,7 +773,7 @@ Without Layer 1:
 from pydantic import BaseSettings
 
 class DataQualityConfig(BaseSettings):
-    # Validation behavior
+    # Validation behaviour
     pandera_strict: bool = True  # Fail on any schema error
     allow_null_in_required: bool = False
 
@@ -824,7 +849,7 @@ ORDER BY 3 DESC;
 - **Import errors for `phlo_quality`**
 
 ```bash
-uv run python -c "from phlo.quality import phlo_quality; print(phlo_quality)"
+uv run python -c "from phlo_quality import phlo_quality; print(phlo_quality)"
 ```
 
 

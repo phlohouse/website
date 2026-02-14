@@ -3,7 +3,7 @@ title: "SQL Transformations with dbt — The Right Way"
 description: "Transform raw data into analysis-ready datasets using dbt models, tests, and the bronze/silver/gold medallion architecture."
 ---
 
-# Part 6: SQL Transformations with dbt—The Right Way
+# Part 6: SQL Transformations with dbt - The Right Way
 
 > Prerequisite: Complete [Part 5: Data Ingestion](05-data-ingestion.md) before running dbt models.
 
@@ -17,7 +17,7 @@ description: "Transform raw data into analysis-ready datasets using dbt models, 
 ## Prerequisites
 
 - [Part 5: Data Ingestion](05-data-ingestion.md)
-- Optional: [Part 2: Getting Started—Setup Guide](02-setup-guide.md) to run services.
+- Optional: [Part 2: Getting Started - Setup Guide](02-setup-guide.md) to run services.
 
 Raw data is in the lakehouse. Now we **transform** it into analysis-ready datasets using **dbt** (data build tool).
 For pipeline scheduling and retries, see [Part 7: Orchestration with Dagster](07-orchestration-dagster.md).
@@ -112,7 +112,7 @@ A model is a `.sql` file that transforms data:
 -- models/bronze/stg_glucose_entries.sql
 {{ config(
     materialized='view',  -- or 'table' for persistent storage
-    tags=['nightscout'],   -- organize models
+    tags=['nightscout'],   -- organise models
 ) }}
 
 -- CTEs for clarity
@@ -172,12 +172,16 @@ FROM {{ ref('fct_glucose_readings') }}  -- ref('B')
 
 dbt builds a DAG (directed acyclic graph):
 
-```mermaid
-flowchart TD
-    A[glucose_entries] -->|Model A| B[stg_glucose_entries]
-    B -->|Model B| C[fct_glucose_readings]
-    C -->|Model C| D[dim_date, mrt_glucose_readings]
-    D -->|Model D| E[gold/marts tables]
+```
+glucose_entries (source)
+    ↓ (Model A)
+stg_glucose_entries
+    ↓ (Model B)
+fct_glucose_readings
+    ↓ (Model C)
+dim_date, mrt_glucose_readings
+    ↓ (Model D)
+gold/marts tables
 ```
 
 Execute order: automatic!
@@ -494,9 +498,9 @@ cd workflows/transforms/dbt
 # Install dbt
 uv pip install dbt-trino
 
-# Create dbt profiles
-mkdir -p ~/.dbt
-cat > ~/.dbt/profiles.yml << EOF
+# Create dbt profiles in the project (recommended for Phlo)
+mkdir -p profiles
+cat > profiles/profiles.yml << EOF
 phlo:
   target: dev
   outputs:
@@ -509,9 +513,10 @@ phlo:
 EOF
 
 # Run dbt
-dbt run --select stg_glucose_entries
-dbt test
-dbt docs generate && dbt docs serve
+dbt run --profiles-dir ./profiles --select stg_glucose_entries
+dbt test --profiles-dir ./profiles
+dbt docs generate --profiles-dir ./profiles
+dbt docs serve --profiles-dir ./profiles
 ```
 
 
@@ -696,5 +701,5 @@ See [Troubleshooting Guide](../operations/troubleshooting.md) for deeper diagnos
 
 ## Next Steps
 
-- Continue with [Part 7: Orchestration with Dagster—Running Your Pipelines](07-orchestration-dagster.md).
+- Continue with [Part 7: Orchestration with Dagster - Running Your Pipelines](07-orchestration-dagster.md).
 - See the end-to-end walk-through in [Part 8: A Real-World End-to-End Example](08-real-world-example.md).

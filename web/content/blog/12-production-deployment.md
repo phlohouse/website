@@ -16,7 +16,7 @@ description: "Deploy your data lakehouse to production with Docker Compose and K
 
 ## Prerequisites
 
-- [Part 2: Getting Started—Setup Guide](02-setup-guide.md)
+- [Part 2: Getting Started - Setup Guide](02-setup-guide.md)
 - [Part 11: Observability & Monitoring](11-observability-monitoring.md)
 
 You've built, tested, and monitored your data lakehouse. Now let's deploy it to production and scale it reliably.
@@ -35,7 +35,7 @@ What differs between your laptop and production:
 | **Failure Recovery** | Restart containers       | Auto-recovery, failover |
 | **Monitoring**       | None (ad-hoc)            | Continuous              |
 | **Capacity**         | 16GB RAM, 1TB disk       | 256GB+ RAM, PB+ storage |
-| **Cost**             | Minimal                  | Optimized               |
+| **Cost**             | Minimal                  | Optimised               |
 | **Compliance**       | None                     | HIPAA, GDPR, etc.       |
 
 ## Architecture: From Laptop to Kubernetes
@@ -195,7 +195,7 @@ OPENMETADATA_MYSQL_PASSWORD=<SECURE_PASSWORD>
 
 ### Step 1b: Infrastructure Configuration (phlo.yaml)
 
-For production deployments, especially when running multiple Phlo projects or customizing service configurations, use `phlo.yaml` for project-level infrastructure settings.
+For production deployments, especially when running multiple Phlo projects or customising service configurations, use `phlo.yaml` for project-level infrastructure settings.
 
 #### Why Infrastructure Configuration?
 
@@ -203,7 +203,7 @@ Secrets in `.phlo/.env.local` and defaults in `phlo.yaml` (env:) handle configur
 
 - **Multi-project deployments**: Running multiple Phlo instances on the same host
 - **Container naming patterns**: Custom naming for service discovery
-- **Port customization**: Per-project port assignments
+- **Port customisation**: Per-project port assignments
 - **Service-specific overrides**: Custom configurations for individual services
 
 #### Creating phlo.yaml
@@ -357,14 +357,14 @@ print(postgres_config["internal_host"])  # "postgres"
 
 #### Production Best Practices
 
-**1. Use descriptive project names:**
+1. Use descriptive project names:
 
 ```yaml
 name: prod-analytics-us-east
 description: Production analytics lakehouse (US East region)
 ```
 
-**2. Document service purposes:**
+2. Document service purposes:
 
 ```yaml
 services:
@@ -373,7 +373,7 @@ services:
     port: 10006
 ```
 
-**3. Reference secrets from .phlo/.env.local:**
+3. Reference secrets from .phlo/.env.local:
 
 ```yaml
 postgres:
@@ -381,7 +381,7 @@ postgres:
     password: ${POSTGRES_PASSWORD} # Never hardcode secrets
 ```
 
-**4. Version control phlo.yaml:**
+4. Version control phlo.yaml:
 
 ```bash
 # Commit to git (no secrets here)
@@ -393,7 +393,7 @@ echo ".phlo/.env.local" >> .gitignore
 ```
 
 
-**5. Use different configs per environment:**
+5. Use different configs per environment:
 
 ```bash
 phlo.yaml              # Base configuration
@@ -428,13 +428,13 @@ trino_endpoint = f"http://{trino_config['internal_host']}:{trino_config['port']}
 For Kubernetes deployments, `phlo.yaml` provides a single source of truth:
 
 ```bash
-# Generate k8s manifests from phlo.yaml
-phlo k8s generate --config phlo.yaml
+# Phlo does not currently ship a `k8s` CLI command.
+# Use phlo.yaml as source of truth, then render manifests via your platform tooling
+# (Helm/Kustomize/Terraform) from the same service/env settings.
 
-# Deploys with:
-# - Service names from phlo.yaml
-# - Port mappings from phlo.yaml
-# - Resource limits from phlo.yaml
+phlo services init --no-dev --force
+
+# Then map values from phlo.yaml/.phlo/.env into your Kubernetes templates.
 ```
 
 
@@ -442,7 +442,7 @@ This ensures consistency between Docker Compose (dev) and Kubernetes (prod).
 
 ### Step 2: Deploy with Docker Compose
 
-Phlo includes a comprehensive `docker-compose.yml` that orchestrates all services. For production, you have options:
+Phlo ships with a `docker-compose.yml` that runs all services. For production, you have options:
 
 **Option A: Docker Compose (Current Implementation)**
 
@@ -477,7 +477,7 @@ The actual `docker-compose.yml` includes:
 
 **Option B: Managed Services (Recommended for Production)**
 
-For production workloads, consider replacing containerized services with managed alternatives:
+For production workloads, consider replacing containerised services with managed alternatives:
 
 ```bash
 # Use AWS RDS for PostgreSQL
@@ -488,7 +488,7 @@ POSTGRES_PORT=5432
 ICEBERG_WAREHOUSE_PATH=s3://your-prod-bucket/warehouse
 MINIO_API_PORT=9000  # Or S3 endpoint
 
-# Keep Dagster, Trino, Nessie containerized with docker-compose
+# Keep Dagster, Trino, Nessie containerised with docker-compose
 docker-compose up -d dagster-webserver dagster-daemon trino nessie
 ```
 
@@ -572,7 +572,7 @@ The observability stack includes:
 
 - **Prometheus**: Metrics collection and storage
 - **Loki**: Log aggregation
-- **Grafana**: Dashboards and visualization
+- **Grafana**: Dashboards and visualisation
 - **Alloy**: Metrics and log forwarding
 - **postgres-exporter**: PostgreSQL metrics
 
@@ -892,7 +892,7 @@ kubectl apply -f k8s/backup-cronjob.yaml
 ```
 
 
-## Cost Optimization
+## Cost Optimisation
 
 ```python
 # phlo/monitoring/cost_tracking.py
@@ -933,9 +933,9 @@ def estimate_monthly_cost():
         "total": total,
     }
 
-# Optimization strategies
+# Optimisation strategies
 def optimize_costs():
-    """Implement cost optimization."""
+    """Implement cost optimisation."""
 
     # 1. S3 Intelligent-Tiering
     # Automatically move old data to cheaper storage classes
@@ -1053,9 +1053,9 @@ Production deployment with Phlo:
 ### Current Implementation (Docker Compose)
 
 **Deployment Method**: `docker-compose up -d` with profiles
-**Infrastructure**: Containerized services with health checks
+**Infrastructure**: Containerised services with health checks
 **Storage**: MinIO (dev) or S3 (production)
-**Database**: PostgreSQL (containerized or RDS)
+**Database**: PostgreSQL (containerised or RDS)
 **Monitoring**: Grafana + Prometheus + Loki
 **Scaling**: Vertical (increase container resources)
 

@@ -3,7 +3,7 @@ title: "Real-World Example — Building a Complete Data Pipeline"
 description: "Build an end-to-end Nightscout glucose monitoring pipeline from API ingestion through transformations to dashboard."
 ---
 
-# Part 8: Real-World Example—Building a Complete Data Pipeline
+# Part 8: Real-World Example - Building a Complete Data Pipeline
 
 > Prerequisite: Complete [Part 2: Getting Started](02-setup-guide.md), [Part 5: Data Ingestion](05-data-ingestion.md), and [Part 6: dbt Transformations](06-dbt-transformations.md).
 
@@ -12,11 +12,11 @@ description: "Build an end-to-end Nightscout glucose monitoring pipeline from AP
 - How the ingestion, dbt, and publishing layers fit together
 - How to configure end-to-end assets for a real dataset
 - How to validate data quality during the pipeline
-- How to visualize outputs in Superset
+- How to visualise outputs in Superset
 
 ## Prerequisites
 
-- [Part 2: Getting Started—Setup Guide](02-setup-guide.md)
+- [Part 2: Getting Started - Setup Guide](02-setup-guide.md)
 - [Part 5: Data Ingestion](05-data-ingestion.md)
 - [Part 6: dbt Transformations](06-dbt-transformations.md)
 
@@ -36,19 +36,22 @@ For validation patterns used in this walkthrough, see [Part 9: Data Quality with
 
 ## The Architecture
 
-```mermaid
-flowchart TD
-    A[Nightscout API] -->|5-min readings| B[Phlo Ingestion]
-    B --> B1[DLT stages to S3]
-    B --> B2[PyIceberg merges to raw.glucose_entries]
-    B --> B3[Nessie tracks via snapshot]
-    B2 --> C[dbt Transformation]
-    C --> C1[Bronze: stg_glucose_entries]
-    C --> C2[Silver: fct_glucose_readings]
-    C --> C3[Gold: dim_date, mrt_glucose_readings]
-    C --> C4[Marts: mrt_glucose_overview]
-    C4 --> D[Postgres Publishing]
-    D --> E[Superset Dashboard]
+```
+Nightscout API
+  ↓ (5-min readings)
+Phlo Ingestion
+  ├─ DLT stages to S3
+  ├─ PyIceberg merges to raw.glucose_entries
+  └─ Nessie tracks via snapshot
+    ↓
+dbt Transformation
+  ├─ Bronze: stg_glucose_entries (staging)
+  ├─ Silver: fct_glucose_readings (enriched)
+  ├─ Gold: dim_date, mrt_glucose_readings (metrics)
+  └─ Marts: mrt_glucose_overview (aggregated)
+    ↓
+Postgres Publishing
+  └─ Superset Dashboard
 ```
 
 ## Step 1: Understanding the API
@@ -405,7 +408,7 @@ def publish_marts_to_postgres(context):
         context.log.info(f"Published {table_name} to Postgres")
 ```
 
-**How it works:**
+How it works:
 
 1. Phlo scans the dbt `manifest.json` for models in the `marts` schema
 2. Auto-generates a publishing asset with dependencies on those marts
@@ -567,17 +570,61 @@ def nightscout_glucose_quality_check(context, trino: TrinoResource) -> AssetChec
 
 ## Complete Data Flow Diagram
 
-```mermaid
-flowchart TD
-    A[Nightscout API - 288 readings/day] -->|2.45s| B[INGESTION: dlt_glucose_entries]
-    B -->|1.23s| C[BRONZE: stg_glucose_entries]
-    C -->|3.42s| D[SILVER: fct_glucose_readings]
-    D -->|1.15s| E[GOLD: mrt_glucose_readings]
-    E -->|0.67s| F[PUBLISH: publish_glucose_marts]
-    F --> G[Superset Dashboard]
 ```
+┌─ Nightscout API ─────────────────┐
+│ 288 readings/day                  │
+│ 5-min intervals                   │
+└────────────┬──────────────────────┘
+
+┌─ INGESTION (2.45s) ───────────────────────┐
+│ dlt_glucose_entries                       │
+│ ├─ Fetch from API (288 rows)              │
+│ ├─ Validate with Pandera [PASSED]         │
+│ ├─ Stage to S3 parquet                    │
+│ └─ Merge to iceberg raw.glucose_entries   │
+└────────────┬──────────────────────────────┘
+
+┌─ TRANSFORM BRONZE (1.23s) ────────────────┐
+│ stg_glucose_entries                       │
+│ ├─ Type conversions                       │
+│ ├─ Rename columns                         │
+│ ├─ Filter nulls & out-of-range            │
+│ └─ Create view in bronze.*                │
+└────────────┬──────────────────────────────┘
+
+┌─ TRANSFORM SILVER (3.42s) ────────────────┐
+│ fct_glucose_readings                      │
+│ ├─ Add time dimensions                    │
+│ ├─ Classify glucose (hypo/in-range/hyper) │
+│ ├─ Calculate rate of change (window fn)   │
+│ └─ Create table in silver.*               │
+└────────────┬──────────────────────────────┘
+
+┌─ TRANSFORM GOLD (1.15s) ──────────────────┐
+│ mrt_glucose_readings                      │
+│ ├─ Aggregate by hour                      │
+│ ├─ Calculate % time in range               │
+│ ├─ Count by category                      │
+│ └─ Create table in gold.*                 │
+└────────────┬──────────────────────────────┘
+
+┌─ PUBLISH (0.67s) ────────────────────────┐
+│ publish_glucose_marts                    │
+│ ├─ Query Iceberg gold tables              │
+│ ├─ Truncate Postgres marts                │
+│ └─ Insert results (1 daily + 24 hourly)   │
+└────────────┬──────────────────────────────┘
+
+┌─ ANALYTICS ───────────────────────┐
+│ Superset Dashboard                │
+│ ├─ Daily avg glucose: 145.3 mg/dL │
+│ ├─ Time in range: 78.2%           │
+│ ├─ Hourly patterns graph           │
+│ └─ 30-day trend                    │
+└───────────────────────────────────┘
 
 Total pipeline time: 8.92s
+```
 
 ## Key Takeaways
 

@@ -228,7 +228,7 @@ class remains a thin wrapper for discovery.
 1. Create a new package directory with `pyproject.toml`.
 2. Add an `AssetProviderPlugin` implementation.
 3. Register entry points under `phlo.plugins.assets` and `phlo.plugins.resources`.
-4. Run `phlo plugins list` to confirm discovery.
+4. Run `phlo plugin list` to confirm discovery.
 
 ## Common Issues
 
@@ -269,7 +269,7 @@ See also: [Part 13: Capability Primitives](13-capability-primitives.md), [Part 1
 
 Custom capability packages let teams ship reusable assets and resources with clear
 entry points and versioned releases. Use AssetProviderPlugin and ResourceProviderPlugin
-to keep domain logic centralized and discoverable across projects.
+to keep domain logic centralised and discoverable across projects.
 
 
 ## Next Steps
