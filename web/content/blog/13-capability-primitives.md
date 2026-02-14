@@ -7,7 +7,7 @@ description: "Understand Phlo's portable asset definitions — AssetSpec, RunSpe
 
 > Prerequisite: Review [Part 5: Data Ingestion](05-data-ingestion.md) and [Part 7: Orchestration](07-orchestration-dagster.md) for asset naming and scheduling context.
 
-Phlo uses capability primitives—portable asset definitions that run on any orchestrator.
+Phlo uses capability primitives - portable asset definitions that run on any orchestrator.
 This post explains the core specs, runtime context, and how adapters translate specs into orchestrator definitions. For plugin integration, see [Part 14: Plugin System](14-plugin-system.md).
 
 ## What You'll Learn
@@ -47,7 +47,7 @@ flowchart LR
 ## The Core Spec Types
 
 Capability specs live in `src/phlo/capabilities/specs.py`. Each spec captures a small, explicit
-piece of behavior.
+piece of behaviour.
 
 ### AssetSpec and RunSpec
 
@@ -216,6 +216,8 @@ The adapter will wrap `raw_users_spec` into the orchestrator-specific asset defi
 - RuntimeContext mismatch: run functions must accept a single RuntimeContext argument.
 - Missing resources: add resource names to AssetSpec.resources and configure them in your adapter.
 - Adapter coupling: avoid importing Dagster, Airflow, or Prefect in capability packages.
+
+See [Troubleshooting Guide](../operations/troubleshooting.md) for deeper diagnostics.
 
 ## See Also
 

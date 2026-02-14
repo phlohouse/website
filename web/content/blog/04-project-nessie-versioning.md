@@ -3,7 +3,7 @@ title: "Project Nessie — Git-Like Versioning for Data"
 description: "Add branching, merging, and tagging to your data catalog with Project Nessie for safe experimentation and auditable changes."
 ---
 
-# Part 4: Project Nessie—Git-Like Versioning for Data
+# Part 4: Project Nessie - Git-Like Versioning for Data
 
 > Prerequisite: Read [Part 3: Apache Iceberg Explained](03-apache-iceberg-explained.md) for table format basics.
 
@@ -17,7 +17,7 @@ description: "Add branching, merging, and tagging to your data catalog with Proj
 ## Prerequisites
 
 - [Part 3: Apache Iceberg Explained](03-apache-iceberg-explained.md)
-- Optional: [Part 2: Getting Started—Setup Guide](02-setup-guide.md) to run commands locally.
+- Optional: [Part 2: Getting Started - Setup Guide](02-setup-guide.md) to run commands locally.
 
 Iceberg gave us time travel. Now let's add **branching**, **merging**, and **tags** to our data with Project Nessie.
 For governance workflows that build on Nessie history, see [Part 10: Metadata & Governance](10-metadata-governance.md).
@@ -38,9 +38,12 @@ git merge  # Promote to main
 
 Nessie brings this same workflow to **data**:
 
-```mermaid
-flowchart LR
-    A[main branch - stable, validated] -->|merge when ready| B[dev branch - experimental, testing]
+```
+main branch (production)     dev branch (development)
+      │                            │
+      │  ← stable, validated       │  ← experimental, testing
+      │                            │
+      └──── merge when ready ──────┘
 ```
 
 ### Nessie Branching Flow (Diagram)
@@ -65,23 +68,29 @@ sequenceDiagram
 
 Without versioning, data work looks like:
 
-```mermaid
-flowchart TD
-    A[Production Data] --> B[Dev transforms it]
-    B --> C[Oops! Broke something]
-    C --> D[Production Data CORRUPTED]
-    D --> E[Lost today's data!]
+```
+Production Data
+    ↓
+  (Dev transforms it)
+    ↓
+  (Oops! Broke something)
+    ↓
+Production Data is CORRUPTED
+    ↓
+(Back up from last night? Lost today's data!)
 ```
 
 With Nessie:
 
-```mermaid
-flowchart TD
-    A[main - production] --> B[dev branch]
-    B --> C[Test transformations]
-    C --> D[Validate quality]
-    D -->|If good, merge| A
-    D -->|If bad, delete branch| E[main unchanged]
+```
+main (production)
+  ↓
+  ├─ dev (development)
+  │   └─ (Test transformations)
+  │   └─ (Validate quality)
+  │   └─ (If bad, delete branch, main unchanged)
+  │
+  └─ (If good, merge dev → main atomically)
 ```
 
 ## Core Nessie Concepts
@@ -132,7 +141,7 @@ main:
 dev (branched from Commit B):
   ├── Commit B': Quality fixes (inherited)
   ├── Commit D: New transformations
-  └── Commit E: Schema optimizations (HEAD)
+  └── Commit E: Schema optimisations (HEAD)
 
 Merge dev → main:
   ├── Commit A: Initial data load
@@ -404,7 +413,7 @@ SELECT
 In dbt, select the target to use the appropriate catalog:
 
 ```yaml
-# workflows/transforms/dbt/profiles.yml
+# workflows/transforms/dbt/profiles/profiles.yml
 
 phlo:
   outputs:
@@ -600,8 +609,8 @@ $ dbt run --select fct_glucose_readings
 $ phlo materialize fct_glucose_readings --partition 2024-01-15
 
 # 4. Validate changes
-$ phlo contract validate glucose_readings
-$ phlo quality run silver.fct_glucose_readings
+$ phlo validate-schema workflows/schemas/glucose.py
+$ phlo catalog describe silver.fct_glucose_readings
 
 # 5. Compare to main
 $ phlo branch diff main feature/add-a1c-calculation
@@ -801,4 +810,4 @@ See also: [Part 3: Apache Iceberg Explained](03-apache-iceberg-explained.md), [P
 - Learn how data is transformed on top of Nessie in [Part 6: dbt Transformations](06-dbt-transformations.md).
 - See governance workflows that build on branches in [Part 10: Metadata & Governance](10-metadata-governance.md).
 
-**Next**: [Part 5: Data Ingestion—Getting Data Into the Lakehouse](05-data-ingestion.md)
+**Next**: [Part 5: Data Ingestion - Getting Data Into the Lakehouse](05-data-ingestion.md)

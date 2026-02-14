@@ -3,7 +3,7 @@ title: "Observability and Monitoring"
 description: "Set up metrics, alerting, log aggregation, and lineage tracking so you know when something breaks before your users do."
 ---
 
-# Part 11: Observability and Monitoring—Knowing Your Pipeline
+# Part 11: Observability and Monitoring - Knowing Your Pipeline
 
 > Prerequisite: Complete [Part 7: Orchestration with Dagster](07-orchestration-dagster.md) to follow the monitoring flows.
 
@@ -18,6 +18,7 @@ description: "Set up metrics, alerting, log aggregation, and lineage tracking so
 
 - [Part 7: Orchestration with Dagster](07-orchestration-dagster.md)
 - Optional: [Part 10: Metadata and Governance](10-metadata-governance.md) for lineage context.
+- Optional for alert CLI examples: `phlo plugin install alerting`
 
 You've built a data lakehouse with validation and governance. But what happens at 3am when something breaks? This post covers observability: monitoring, alerting, and troubleshooting.
 For custom UI extensions in the observability layer, see [Part 15: Observatory Extensions](15-observatory-extensions.md).
@@ -45,7 +46,7 @@ Observability solves this with:
 [Monitoring] → Understand what's happening
 [Alerting]   → Get notified of problems
 [Tracing]    → Find root causes quickly
-[Dashboards] → Visualize pipeline health
+[Dashboards] → Visualise pipeline health
 ```
 
 ## Three Pillars of Observability
@@ -98,11 +99,33 @@ Total: 152ms
 
 ## Phlo's Observability Stack
 
-```mermaid
-flowchart TD
-    A[Application Layer: Dagster, dbt, DLT] -->|emits events| B[Phlo CLI & Monitoring]
-    B --> C[Storage & Collection]
-    C --> D[Alerting & Notifications]
+```
+┌──────────────────────────────┐
+│  Application Layer           │
+│  (Dagster, dbt, DLT)         │
+└──────────────────────────────┘
+            ↓ (emits events)
+┌──────────────────────────────┐
+│  Phlo CLI & Monitoring       │
+│  • phlo logs                 │
+│  • phlo metrics              │
+│  • phlo lineage              │
+│  • phlo alerts (alerting plugin) │
+└──────────────────────────────┘
+            ↓
+┌──────────────────────────────┐
+│  Storage & Collection        │
+│  • Dagster Event Log         │
+│  • Metrics Collector         │
+│  • Lineage Graph             │
+└──────────────────────────────┘
+            ↓
+┌──────────────────────────────┐
+│  Alerting & Notifications    │
+│  • Slack Webhooks            │
+│  • PagerDuty                 │
+│  • Email                     │
+└──────────────────────────────┘
 ```
 
 ## Metrics: Tracking Pipeline Health
@@ -310,6 +333,10 @@ export PHLO_ALERT_EMAIL_RECIPIENTS="data-team@yourcompany.com,oncall@yourcompany
 Check alert system status:
 
 ```bash
+# Install optional alerting plugin once
+$ phlo plugin install alerting
+
+# Check alert system status
 $ phlo alerts status
 
 Alert System Status
@@ -366,7 +393,7 @@ Phlo automatically sends alerts for:
 | **ERROR**    | Something failed  | Slack + Email + PagerDuty (low urgency) |
 | **CRITICAL** | Production impact | All channels + PagerDuty (high urgency) |
 
-## Dashboards: Visualizing Health
+## Dashboards: Visualising Health
 
 ### Main Operations Dashboard
 
@@ -583,7 +610,7 @@ def update_observability():
     return {}
 ```
 
-## Lineage Visualization: Understanding Your Data Flow
+## Lineage Visualisation: Understanding Your Data Flow
 
 One of the hardest questions in data engineering: "If I change this table, what breaks?"
 
@@ -941,8 +968,8 @@ Phlo's observability stack provides:
 
 **Metrics**: Track what's happening via `phlo metrics` (execution time, throughput, quality)
 **Logs**: Understand why with `phlo logs` (structured logs, searchable, real-time tailing)
-**Lineage**: Understand impact with `phlo lineage` (CLI visualization, export, impact analysis)
-**Alerts**: Get notified via `phlo alerts` (Slack, PagerDuty, email with deduplication)
+**Lineage**: Understand impact with `phlo lineage` (CLI visualisation, export, impact analysis)
+**Alerts**: Get notified via `phlo alerts` (requires `phlo-alerting` plugin; Slack, PagerDuty, email with deduplication)
 
 Combined, you have:
 

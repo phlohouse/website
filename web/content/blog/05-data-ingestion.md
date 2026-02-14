@@ -3,9 +3,9 @@ title: "Data Ingestion — Getting Data Into the Lakehouse"
 description: "Master Phlo's two-step ingestion pattern using DLT for extraction and PyIceberg for merge-based loading into Iceberg tables."
 ---
 
-# Part 5: Data Ingestion—Getting Data Into the Lakehouse
+# Part 5: Data Ingestion - Getting Data Into the Lakehouse
 
-> Prerequisite: Complete [Part 2: Getting Started—Setup Guide](02-setup-guide.md) before running ingestion.
+> Prerequisite: Complete [Part 2: Getting Started - Setup Guide](02-setup-guide.md) before running ingestion.
 
 ## What You'll Learn
 
@@ -16,7 +16,7 @@ description: "Master Phlo's two-step ingestion pattern using DLT for extraction 
 
 ## Prerequisites
 
-- [Part 2: Getting Started—Setup Guide](02-setup-guide.md)
+- [Part 2: Getting Started - Setup Guide](02-setup-guide.md)
 - Optional: [Part 7: Orchestration with Dagster](07-orchestration-dagster.md) for scheduling context.
 
 We have our lakehouse infrastructure. Now: **how does data actually get in?**
@@ -31,16 +31,20 @@ Phlo uses a two-step pattern:
 
 Why two steps instead of one?
 
-```mermaid
-flowchart TD
-    A1[External API] -->|network fails?| B1[Iceberg Table]
-    B1 -.- C1[Corruption if interrupted]
-    style C1 fill:#f99,stroke:#c00
+```
+Single Step (Risky)
+    External API
+      ↓ (network fails?)
+    Iceberg Table
+      (Corruption if interrupted)
 
-    A2[External API] -->|network fails? retry| D2[S3 Staging]
-    D2 -->|has backup of raw data| E2[Iceberg Table]
-    E2 -.- F2[Merge with idempotent dedup]
-    style F2 fill:#9f9,stroke:#0a0
+Two Steps (Safe)
+    External API
+      ↓ (network fails? No problem, retry)
+    S3 Staging (Temporary)
+      ↓ (Has backup of raw data)
+    Iceberg Table
+      (Merge with idempotent deduplication)
 ```
 
 The two-step pattern ensures:
@@ -65,7 +69,7 @@ Phlo provides the `@phlo_ingestion` decorator to simplify DLT ingestion. Here's 
 ```python
 # From phlo-examples/nightscout/workflows/ingestion/nightscout/readings.py
 
-from phlo.ingestion import phlo_ingestion
+from phlo_dlt.decorator import phlo_ingestion
 from dlt.sources.rest_api import rest_api
 from workflows.schemas.nightscout import RawGlucoseEntries
 
@@ -135,14 +139,14 @@ The decorator handles all the complexity:
 
 ### Merge Strategies
 
-Phlo supports two merge strategies, allowing you to optimize for different data patterns:
+Phlo supports two merge strategies, allowing you to optimise for different data patterns:
 
 #### Append Strategy (Insert-Only)
 
 Best for immutable event streams where you never update existing records:
 
 ```python
-from phlo.ingestion import phlo_ingestion
+from phlo_dlt.decorator import phlo_ingestion
 
 @phlo_ingestion(
     table_name="api_events",
@@ -155,14 +159,14 @@ def api_events(partition_date: str):
     return rest_api(...)
 ```
 
-**Characteristics:**
+Characteristics:
 
 - Fastest performance (no deduplication overhead)
 - No checking for duplicates
 - Simply appends all new records
 - **Use for**: Server logs, clickstream events, time-series sensor data, immutable audit trails
 
-**Trade-offs:**
+Trade-offs:
 
 - If you accidentally run the same partition twice, you'll get duplicates
 - No way to update existing records
@@ -173,7 +177,7 @@ def api_events(partition_date: str):
 Best for dimension tables and data that may need updates:
 
 ```python
-from phlo.ingestion import phlo_ingestion
+from phlo_dlt.decorator import phlo_ingestion
 
 @phlo_ingestion(
     table_name="user_profiles",
@@ -187,7 +191,7 @@ def user_profiles(partition_date: str):
     return rest_api(...)
 ```
 
-**Deduplication Strategies:**
+Deduplication Strategies:
 
 1. **`last` (default)**: Keep the most recent occurrence
 
@@ -217,14 +221,14 @@ def user_profiles(partition_date: str):
    - Useful when you want to detect actual data changes
    - Example: Configuration snapshots (only update if content differs)
 
-**Characteristics:**
+Characteristics:
 
 - Performs upsert: UPDATE if `unique_key` exists, INSERT if new
 - Removes duplicates within the same batch
 - Idempotent: running multiple times produces same result
 - **Use for**: User profiles, product catalogs, reference data, slowly changing dimensions
 
-**Trade-offs:**
+Trade-offs:
 
 - Slower than append (requires deduplication logic)
 - More memory usage during merge
@@ -249,7 +253,7 @@ The glucose ingestion uses merge strategy because:
 3. **Idempotency**: We want `materialize --partition 2024-10-15` to be safe to run multiple times
 
 ```python
-from phlo.ingestion import phlo_ingestion
+from phlo_dlt.decorator import phlo_ingestion
 
 @phlo_ingestion(
     table_name="glucose_entries",
@@ -267,7 +271,7 @@ If we used `append` strategy instead:
 - Corrected readings wouldn't update (you'd have both old and new)
 - dbt transformations downstream would need to handle deduplication
 
-### DLT Schema Normalization
+### DLT Schema Normalisation
 
 DLT normalizes messy API responses:
 
@@ -285,7 +289,7 @@ DLT normalizes messy API responses:
   ...
 ]
 
-# After DLT (normalized schema)
+# After DLT (normalised schema)
 Parquet file with columns:
 ├── date_string: string (converted from dateString)
 ├── _id: string
@@ -460,7 +464,7 @@ Let's trace through what happens when you materialize a `@phlo_ingestion` asset:
 # Timeline: 2024-10-15
 
 # 1. Materialize the asset
-dagster asset materialize --select glucose_entries \
+dagster asset materialize --select dlt_glucose_entries \
   --partition "2024-10-15"
 
 # 2. The @phlo_ingestion decorator executes your function
@@ -602,7 +606,7 @@ The `@phlo_ingestion` decorator works with any DLT source. You just return a DLT
 ```python
 # Example: Custom API ingestion
 
-from phlo.ingestion import phlo_ingestion
+from phlo_dlt.decorator import phlo_ingestion
 from dlt.sources.rest_api import rest_api
 
 @phlo_ingestion(
@@ -646,29 +650,38 @@ def github_events(partition_date: str):
 
 ### Pattern 1: API Ingestion (Nightscout, GitHub)
 
-```mermaid
-flowchart TD
-    A[API] -->|requests.get| B[Python dict]
-    B -->|DLT pipeline| C[S3 parquet]
-    C -->|PyIceberg merge| D[Iceberg table]
+```
+API (network)
+  ↓ (requests.get)
+Python dict
+  ↓ (DLT pipeline)
+S3 parquet
+  ↓ (PyIceberg merge)
+Iceberg table
 ```
 
 ### Pattern 2: File Upload (CSV, Excel)
 
-```mermaid
-flowchart TD
-    A[Local file] -->|read_csv, openpyxl| B[Pandas DataFrame]
-    B -->|DLT pipeline| C[S3 parquet]
-    C -->|PyIceberg merge| D[Iceberg table]
+```
+Local file
+  ↓ (read_csv, openpyxl)
+Pandas DataFrame
+  ↓ (DLT pipeline)
+S3 parquet
+  ↓ (PyIceberg merge)
+Iceberg table
 ```
 
 ### Pattern 3: Database Replication
 
-```mermaid
-flowchart TD
-    A[Source Database] -->|SELECT query| B[Pandas DataFrame]
-    B -->|DLT pipeline| C[S3 parquet]
-    C -->|PyIceberg merge| D[Iceberg table]
+```
+Source Database (PostgreSQL, MySQL)
+  ↓ (SELECT * from table)
+Pandas DataFrame
+  ↓ (DLT pipeline)
+S3 parquet
+  ↓ (PyIceberg merge)
+Iceberg table
 ```
 
 All follow the same pattern for safety and idempotency.
@@ -679,7 +692,7 @@ All follow the same pattern for safety and idempotency.
 # Run ingestion and watch the flow
 # This uses the @phlo_ingestion decorated function
 dagster asset materialize \
-  --select glucose_entries \
+  --select dlt_glucose_entries \
   --partition "2024-10-15"
 
 # Check Iceberg table via PyIceberg
@@ -764,7 +777,7 @@ See you there!
 - **Import errors for `phlo_ingestion`**
 
 ```bash
-uv run python -c "from phlo.ingestion import phlo_ingestion; print(phlo_ingestion)"
+uv run python -c "from phlo_dlt.decorator import phlo_ingestion; print(phlo_ingestion)"
 ```
 
 
@@ -792,7 +805,7 @@ See [Troubleshooting Guide](../operations/troubleshooting.md) for deeper diagnos
 
 ## See Also
 
-See also: [Part 2: Getting Started—Setup Guide](02-setup-guide.md), [Part 7: Orchestration with Dagster](07-orchestration-dagster.md), [Part 8: A Real-World End-to-End Example](08-real-world-example.md). Reference: [Phlo API Reference](../reference/phlo-api.md).
+See also: [Part 2: Getting Started - Setup Guide](02-setup-guide.md), [Part 7: Orchestration with Dagster](07-orchestration-dagster.md), [Part 8: A Real-World End-to-End Example](08-real-world-example.md). Reference: [Phlo API Reference](../reference/phlo-api.md).
 
 
 ## Summary
@@ -812,7 +825,7 @@ The `@phlo_ingestion` decorator simplifies data ingestion by handling:
 - `table_name`: Iceberg table to write to
 - `unique_key`: Column for deduplication
 - `validation_schema`: Pandera schema for validation
-- `group`: Asset group for organization
+- `group`: Asset group for organisation
 - `cron`: Schedule (optional)
 - `freshness_hours`: Expected data freshness (optional)
 
@@ -839,5 +852,5 @@ The `@phlo_ingestion` decorator simplifies data ingestion by handling:
 
 ## Next Steps
 
-- Continue with [Part 6: SQL Transformations with dbt—The Right Way](06-dbt-transformations.md).
+- Continue with [Part 6: SQL Transformations with dbt - The Right Way](06-dbt-transformations.md).
 - Add quality checks in [Part 9: Data Quality with Pandera](09-data-quality-with-pandera.md).

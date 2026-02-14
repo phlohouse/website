@@ -3,7 +3,7 @@ title: "Orchestration with Dagster — Running Your Pipelines"
 description: "Schedule, monitor, and manage your data pipelines with Dagster assets, partitions, sensors, and retry policies."
 ---
 
-# Part 7: Orchestration with Dagster—Running Your Pipelines
+# Part 7: Orchestration with Dagster - Running Your Pipelines
 
 > Prerequisite: Complete [Part 5: Data Ingestion](05-data-ingestion.md) and [Part 6: dbt Transformations](06-dbt-transformations.md) first.
 
@@ -22,7 +22,7 @@ description: "Schedule, monitor, and manage your data pipelines with Dagster ass
 We have data flowing in (DLT + Iceberg) and transformations defined (dbt). Now: **Who runs this? When? What happens if it fails?**
 For monitoring and alerts, see [Part 11: Observability & Monitoring](11-observability-monitoring.md).
 
-That's **Dagster's job**—orchestration.
+That's **Dagster's job** - orchestration.
 
 ## The Orchestration Problem
 
@@ -43,14 +43,16 @@ publish_to_postgres.py                        # Manual - depends on dbt
 
 With Dagster:
 
-```mermaid
-flowchart TD
-    A[6:00 AM - Scheduler triggers ingestion] --> B[6:02 AM - Ingestion done]
-    B --> C[6:04 AM - dbt transforms complete]
-    C --> D[6:06 AM - Publishing complete]
-    D --> E{Failure?}
-    E -->|Yes| F[Alert via email/Slack]
-    E -->|No| G[All complete]
+```
+6:00 AM: Dagster scheduler triggers ingestion
+         ↓ watches for completion
+6:02 AM: Ingestion done → Dagster auto-triggers dbt
+         ↓ watches for completion
+6:04 AM: dbt done → Dagster auto-triggers publishing
+         ↓ watches for completion
+6:06 AM: All complete
+         ↓
+         If anything fails → Alert via email/Slack
 ```
 
 ### Asset Dependency Graph (Diagram)
@@ -428,7 +430,7 @@ Need to re-process the last 90 days.
 
 Manual approach:
   for date in 2024-07-01 to 2024-09-30:
-    phlo materialize glucose_entries --partition $date
+    phlo materialize dlt_glucose_entries --partition $date
     # Wait for each to complete...
 
 Time: 90 days × 2 minutes = 3 hours of babysitting
@@ -440,9 +442,9 @@ The `phlo backfill` command handles date ranges intelligently:
 
 ```bash
 # Backfill a date range
-$ phlo backfill glucose_entries --start-date 2024-07-01 --end-date 2024-09-30
+$ phlo backfill dlt_glucose_entries --start-date 2024-07-01 --end-date 2024-09-30
 
-Backfill Plan: glucose_entries
+Backfill Plan: dlt_glucose_entries
 ══════════════════════════════
 
 Date Range: 2024-07-01 to 2024-09-30
@@ -467,12 +469,12 @@ For large backfills, run multiple partitions simultaneously:
 
 ```bash
 # Run 4 partitions in parallel
-$ phlo backfill glucose_entries \
+$ phlo backfill dlt_glucose_entries \
     --start-date 2024-01-01 \
     --end-date 2024-12-31 \
     --parallel 4
 
-Backfill Plan: glucose_entries
+Backfill Plan: dlt_glucose_entries
 ══════════════════════════════
 
 Date Range: 2024-01-01 to 2024-12-31
@@ -489,7 +491,7 @@ Estimated Time: ~90 minutes
 ```
 
 
-**Parallel considerations:**
+Parallel considerations:
 
 - More workers = faster, but more resource usage
 - Don't exceed your database connection pool
@@ -501,7 +503,7 @@ Sometimes you need specific dates, not a range:
 
 ```bash
 # Only these specific dates
-$ phlo backfill glucose_entries \
+$ phlo backfill dlt_glucose_entries \
     --partitions 2024-01-01,2024-01-15,2024-02-01,2024-03-01
 ```
 
@@ -512,7 +514,7 @@ If a backfill fails partway through (network issue, resource limits), resume it:
 
 ```bash
 # Backfill gets interrupted at partition 45
-$ phlo backfill glucose_entries --start-date 2024-01-01 --end-date 2024-03-31
+$ phlo backfill dlt_glucose_entries --start-date 2024-01-01 --end-date 2024-03-31
 ...
 [45/90] 2024-02-14 ✗ Connection timeout
 Backfill interrupted. Run with --resume to continue.
@@ -520,7 +522,7 @@ Backfill interrupted. Run with --resume to continue.
 # Later, resume from where it stopped
 $ phlo backfill --resume
 
-Resuming backfill: glucose_entries
+Resuming backfill: dlt_glucose_entries
 Completed: 44/90
 Remaining: 46 partitions
 
@@ -535,7 +537,7 @@ Remaining: 46 partitions
 Preview what will happen without executing:
 
 ```bash
-$ phlo backfill glucose_entries \
+$ phlo backfill dlt_glucose_entries \
     --start-date 2024-01-01 \
     --end-date 2024-01-31 \
     --dry-run
@@ -543,7 +545,7 @@ $ phlo backfill glucose_entries \
 Backfill Plan (DRY RUN)
 ═══════════════════════
 
-Asset: glucose_entries
+Asset: dlt_glucose_entries
 Partitions to process: 31
 
   2024-01-01 (not materialized)
@@ -583,14 +585,14 @@ For production backfills:
 
 ```bash
 # Production backfill pattern
-$ phlo backfill glucose_entries \
+$ phlo backfill dlt_glucose_entries \
     --start-date 2024-01-01 \
     --end-date 2024-12-31 \
     --parallel 2 \           # Conservative parallelism
     --dry-run                # Preview first
 
 # If dry-run looks good:
-$ phlo backfill glucose_entries \
+$ phlo backfill dlt_glucose_entries \
     --start-date 2024-01-01 \
     --end-date 2024-12-31 \
     --parallel 2
@@ -661,7 +663,7 @@ def dlt_glucose_entries() -> MaterializeResult:
 
 ## Configuration and Environment
 
-Phlo uses `phlo/config.py` for centralized config:
+Phlo uses `phlo/config.py` for centralised config:
 
 ```python
 # phlo/config.py
@@ -838,5 +840,5 @@ See also: [Part 5: Data Ingestion](05-data-ingestion.md), [Part 6: dbt Transform
 
 ## Next Steps
 
-- Continue with [Part 8: Real-World Example—Building a Complete Data Pipeline](08-real-world-example.md).
+- Continue with [Part 8: Real-World Example - Building a Complete Data Pipeline](08-real-world-example.md).
 - Review monitoring in [Part 11: Observability & Monitoring](11-observability-monitoring.md).
