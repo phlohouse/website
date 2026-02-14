@@ -1,0 +1,114 @@
+[
+  {
+    "slug": "01-intro-data-lakehouse",
+    "title": "What is a Data Lakehouse? Understanding Modern Data Architecture",
+    "number": 1,
+    "description": "Learn why lakehouse architecture combines the best of data lakes and warehouses, and how Iceberg, Nessie, Trino, and MinIO work together in Phlo.",
+    "readTime": "6 min"
+  },
+  {
+    "slug": "02-setup-guide",
+    "title": "Getting Started with Phlo — Setup Guide",
+    "number": 2,
+    "description": "Install Phlo, bootstrap a new project, start the service stack, and run your first data pipeline in under 20 minutes.",
+    "readTime": "9 min"
+  },
+  {
+    "slug": "03-apache-iceberg-explained",
+    "title": "Apache Iceberg — The Table Format That Changed Everything",
+    "number": 3,
+    "description": "Understand how Apache Iceberg enables ACID transactions, time travel, and schema evolution on your data lake.",
+    "readTime": "9 min"
+  },
+  {
+    "slug": "04-project-nessie-versioning",
+    "title": "Project Nessie — Git-Like Versioning for Data",
+    "number": 4,
+    "description": "Add branching, merging, and tagging to your data catalog with Project Nessie for safe experimentation and auditable changes.",
+    "readTime": "13 min"
+  },
+  {
+    "slug": "05-data-ingestion",
+    "title": "Data Ingestion — Getting Data Into the Lakehouse",
+    "number": 5,
+    "description": "Master Phlo's two-step ingestion pattern using DLT for extraction and PyIceberg for merge-based loading into Iceberg tables.",
+    "readTime": "14 min"
+  },
+  {
+    "slug": "06-dbt-transformations",
+    "title": "SQL Transformations with dbt — The Right Way",
+    "number": 6,
+    "description": "Transform raw data into analysis-ready datasets using dbt models, tests, and the bronze/silver/gold medallion architecture.",
+    "readTime": "10 min"
+  },
+  {
+    "slug": "07-orchestration-dagster",
+    "title": "Orchestration with Dagster — Running Your Pipelines",
+    "number": 7,
+    "description": "Schedule, monitor, and manage your data pipelines with Dagster assets, partitions, sensors, and retry policies.",
+    "readTime": "12 min"
+  },
+  {
+    "slug": "08-real-world-example",
+    "title": "Real-World Example — Building a Complete Data Pipeline",
+    "number": 8,
+    "description": "Build an end-to-end Nightscout glucose monitoring pipeline from API ingestion through transformations to dashboard.",
+    "readTime": "10 min"
+  },
+  {
+    "slug": "09-data-quality-with-pandera",
+    "title": "Data Quality — Pandera Schemas and Asset Checks",
+    "number": 9,
+    "description": "Enforce data quality at every layer with Pandera schemas, the @phlo_quality decorator, and Dagster asset checks.",
+    "readTime": "13 min"
+  },
+  {
+    "slug": "10-metadata-governance",
+    "title": "Metadata and Governance",
+    "number": 10,
+    "description": "Catalog, discover, and govern your data assets with OpenMetadata integration, data contracts, and schema evolution policies.",
+    "readTime": "21 min"
+  },
+  {
+    "slug": "11-observability-monitoring",
+    "title": "Observability and Monitoring",
+    "number": 11,
+    "description": "Set up metrics, alerting, log aggregation, and lineage tracking so you know when something breaks before your users do.",
+    "readTime": "14 min"
+  },
+  {
+    "slug": "12-production-deployment",
+    "title": "Production Deployment",
+    "number": 12,
+    "description": "Deploy your data lakehouse to production with Docker Compose and Kubernetes, covering scaling, backups, and high availability.",
+    "readTime": "16 min"
+  },
+  {
+    "slug": "13-capability-primitives",
+    "title": "Capability Primitives",
+    "number": 13,
+    "description": "Understand Phlo's portable asset definitions — AssetSpec, RunSpec, and runtime context — that work across any orchestrator.",
+    "readTime": "4 min"
+  },
+  {
+    "slug": "14-plugin-system",
+    "title": "Extending Phlo with Plugins",
+    "number": 14,
+    "description": "Build custom data sources, quality checks, and transformations using Phlo's entry-point-based plugin architecture.",
+    "readTime": "16 min"
+  },
+  {
+    "slug": "15-observatory-extensions",
+    "title": "Observatory Extensions",
+    "number": 15,
+    "description": "Extend the Observatory UI with custom routes, navigation items, dashboard slots, and settings panels from any package.",
+    "readTime": "5 min"
+  },
+  {
+    "slug": "16-building-custom-packages",
+    "title": "Building Custom Packages",
+    "number": 16,
+    "description": "Package domain-specific assets, resources, and services into reusable Phlo packages with capability primitives and entry points.",
+    "readTime": "4 min"
+  }
+]
