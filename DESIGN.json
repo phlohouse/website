@@ -1,0 +1,264 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-05-09T19:45:00+01:00",
+  "title": "Design System: Phlo",
+  "extensions": {
+    "colorMeta": {
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink Navy",
+        "canonical": "oklch(0.22 0.055 260)",
+        "tonalRamp": [
+          "oklch(0.15 0.055 260)",
+          "oklch(0.24 0.055 260)",
+          "oklch(0.34 0.05 260)",
+          "oklch(0.46 0.04 260)",
+          "oklch(0.62 0.03 260)",
+          "oklch(0.78 0.02 260)",
+          "oklch(0.9 0.012 260)",
+          "oklch(0.97 0.006 260)"
+        ]
+      },
+      "surface": {
+        "role": "neutral",
+        "displayName": "Clean Surface",
+        "canonical": "oklch(0.995 0.004 248)",
+        "tonalRamp": [
+          "oklch(0.18 0.01 248)",
+          "oklch(0.3 0.01 248)",
+          "oklch(0.45 0.009 248)",
+          "oklch(0.62 0.008 248)",
+          "oklch(0.78 0.007 248)",
+          "oklch(0.9 0.006 248)",
+          "oklch(0.96 0.005 248)",
+          "oklch(0.995 0.004 248)"
+        ]
+      },
+      "brand": {
+        "role": "primary",
+        "displayName": "Lakehouse Blue",
+        "canonical": "oklch(0.56 0.22 263)",
+        "tonalRamp": [
+          "oklch(0.18 0.12 263)",
+          "oklch(0.28 0.16 263)",
+          "oklch(0.4 0.2 263)",
+          "oklch(0.56 0.22 263)",
+          "oklch(0.68 0.16 263)",
+          "oklch(0.8 0.1 263)",
+          "oklch(0.9 0.055 263)",
+          "oklch(0.96 0.03 263)"
+        ]
+      },
+      "teal": {
+        "role": "secondary",
+        "displayName": "Flow Teal",
+        "canonical": "oklch(0.7 0.14 182)",
+        "tonalRamp": [
+          "oklch(0.18 0.08 182)",
+          "oklch(0.3 0.1 182)",
+          "oklch(0.45 0.12 182)",
+          "oklch(0.58 0.14 182)",
+          "oklch(0.7 0.14 182)",
+          "oklch(0.82 0.09 182)",
+          "oklch(0.92 0.05 182)",
+          "oklch(0.97 0.03 182)"
+        ]
+      },
+      "green": {
+        "role": "secondary",
+        "displayName": "Validation Green",
+        "canonical": "#22C55E",
+        "tonalRamp": [
+          "oklch(0.18 0.08 145)",
+          "oklch(0.3 0.1 145)",
+          "oklch(0.45 0.12 145)",
+          "oklch(0.6 0.14 145)",
+          "oklch(0.74 0.14 145)",
+          "oklch(0.84 0.09 145)",
+          "oklch(0.93 0.05 145)",
+          "oklch(0.97 0.03 145)"
+        ]
+      },
+      "amber": {
+        "role": "tertiary",
+        "displayName": "Publish Amber",
+        "canonical": "oklch(0.76 0.17 68)",
+        "tonalRamp": [
+          "oklch(0.2 0.08 68)",
+          "oklch(0.32 0.1 68)",
+          "oklch(0.48 0.13 68)",
+          "oklch(0.62 0.16 68)",
+          "oklch(0.76 0.17 68)",
+          "oklch(0.86 0.11 68)",
+          "oklch(0.94 0.06 68)",
+          "oklch(0.98 0.03 68)"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "display": {
+        "displayName": "Display",
+        "purpose": "Hero and section headlines, using the brand-board display family."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Readable product explanation and marketing copy."
+      },
+      "mono": {
+        "displayName": "Mono",
+        "purpose": "Literal code, CLI commands, branch names, and machine labels."
+      }
+    },
+    "shadows": [
+      {
+        "name": "card",
+        "value": "0 1px 2px rgba(35, 84, 135, 0.05), 0 10px 28px -12px rgba(35, 84, 135, 0.16)",
+        "purpose": "Default soft lift for cards, chips, and status badges."
+      },
+      {
+        "name": "elevated",
+        "value": "0 4px 14px -4px rgba(35, 84, 135, 0.12), 0 28px 70px -28px rgba(35, 84, 135, 0.3)",
+        "purpose": "Hero code windows and important hover emphasis."
+      }
+    ],
+    "motion": [
+      {
+        "name": "state-lift",
+        "value": "transform 180ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 180ms cubic-bezier(0.22, 1, 0.36, 1)",
+        "purpose": "Small hover lift for interactive cards and buttons."
+      },
+      {
+        "name": "hero-stream-drift",
+        "value": "9s ease-in-out infinite alternate",
+        "purpose": "Subtle flow-line movement, disabled under reduced motion."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "md",
+        "value": "768px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Primary CTA for docs, install, or conversion actions.",
+      "html": "<button class=\"ds-btn-primary\">Read the docs <svg viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"M3 8h10m0 0L9 4m4 4-4 4\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"1.75\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></button>",
+      "css": ".ds-btn-primary { display: inline-flex; align-items: center; gap: 8px; border: 0; border-radius: 8px; background: #2563EB; color: #FEFEFF; padding: 12px 20px; font: 600 14px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; box-shadow: 0 1px 2px rgba(35, 84, 135, 0.05), 0 10px 28px -12px rgba(35, 84, 135, 0.16); transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1), background 180ms cubic-bezier(0.22, 1, 0.36, 1); } .ds-btn-primary svg { width: 16px; height: 16px; } .ds-btn-primary:hover { background: #1D4ED8; transform: translateY(-1px); } .ds-btn-primary:focus-visible { outline: 2px solid rgba(37, 99, 235, 0.35); outline-offset: 3px; }"
+    },
+    {
+      "name": "Secondary Button",
+      "kind": "button",
+      "refersTo": "button-secondary",
+      "description": "Secondary CTA used next to the primary action.",
+      "html": "<button class=\"ds-btn-secondary\">Get started</button>",
+      "css": ".ds-btn-secondary { display: inline-flex; align-items: center; justify-content: center; border: 1px solid #DCE7F3; border-radius: 8px; background: #FEFEFF; color: #0F172A; padding: 12px 20px; font: 600 14px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; box-shadow: 0 1px 2px rgba(35, 84, 135, 0.05), 0 10px 28px -12px rgba(35, 84, 135, 0.16); transition: transform 180ms cubic-bezier(0.22, 1, 0.36, 1), box-shadow 180ms cubic-bezier(0.22, 1, 0.36, 1); } .ds-btn-secondary:hover { transform: translateY(-1px); box-shadow: 0 4px 14px -4px rgba(35, 84, 135, 0.12), 0 28px 70px -28px rgba(35, 84, 135, 0.3); } .ds-btn-secondary:focus-visible { outline: 2px solid rgba(37, 99, 235, 0.25); outline-offset: 3px; }"
+    },
+    {
+      "name": "Header Navigation",
+      "kind": "nav",
+      "refersTo": "navigation",
+      "description": "Quiet top navigation for the brand site.",
+      "html": "<nav class=\"ds-nav\"><a>Product</a><a>Docs</a><a>Examples</a><a>GitHub</a><a>Pricing</a></nav>",
+      "css": ".ds-nav { display: flex; align-items: center; gap: 32px; font: 600 13px/1.2 Inter, ui-sans-serif, system-ui, sans-serif; color: rgba(15, 23, 42, 0.7); } .ds-nav a { color: inherit; text-decoration: none; transition: color 160ms cubic-bezier(0.22, 1, 0.36, 1); } .ds-nav a:hover { color: #0F172A; } .ds-nav a:focus-visible { outline: 2px solid rgba(37, 99, 235, 0.3); outline-offset: 4px; border-radius: 4px; }"
+    },
+    {
+      "name": "Status Badge",
+      "kind": "chip",
+      "refersTo": "badge-status",
+      "description": "Compact status card used beside the hero code window.",
+      "html": "<div class=\"ds-status\"><span class=\"ds-status-icon\"><svg viewBox=\"0 0 16 16\" aria-hidden=\"true\"><path d=\"M3.5 8.5l3 3 6-6\" fill=\"none\" stroke=\"currentColor\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-linejoin=\"round\"/></svg></span><span><strong>Quality checks</strong><small>12 checks passed</small></span></div>",
+      "css": ".ds-status { display: flex; align-items: flex-start; gap: 12px; width: 216px; border: 1px solid #DCE7F3; border-radius: 8px; background: rgba(254, 254, 255, 0.95); color: #0F172A; padding: 12px 16px; box-shadow: 0 1px 2px rgba(35, 84, 135, 0.05), 0 10px 28px -12px rgba(35, 84, 135, 0.16); font-family: Inter, ui-sans-serif, system-ui, sans-serif; } .ds-status-icon { display: grid; place-items: center; flex: 0 0 32px; width: 32px; height: 32px; border-radius: 8px; background: #F0FDFA; color: #14B8A6; } .ds-status-icon svg { width: 16px; height: 16px; } .ds-status strong { display: block; font-size: 14px; line-height: 1.25; font-weight: 600; } .ds-status small { display: block; margin-top: 2px; color: #64748B; font-size: 11px; line-height: 1.3; font-weight: 500; }"
+    },
+    {
+      "name": "Code Window",
+      "kind": "custom",
+      "refersTo": "code-window",
+      "description": "Dark product-proof surface for short Phlo snippets.",
+      "html": "<div class=\"ds-code\"><div class=\"ds-code-bar\"><span></span><span></span><span></span><strong>orders.py</strong></div><pre><code><span class=\"kw\">from</span> phlo <span class=\"kw\">import</span> pipeline\\n\\n<span class=\"deco\">@phlo.ingest</span>(<span class=\"str\">\"kafka://orders\"</span>)\\n<span class=\"kw\">def</span> <span class=\"fn\">orders</span>(ctx):\\n    <span class=\"kw\">return</span> ctx.<span class=\"fn\">read</span>()</code></pre></div>",
+      "css": ".ds-code { overflow: hidden; border-radius: 12px; background: #0F172A; color: #E2E8F0; box-shadow: 0 4px 14px -4px rgba(35, 84, 135, 0.12), 0 28px 70px -28px rgba(35, 84, 135, 0.3); font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace; } .ds-code-bar { display: flex; align-items: center; gap: 6px; border-bottom: 1px solid rgba(255,255,255,0.05); padding: 10px 16px; background: rgba(255,255,255,0.03); } .ds-code-bar span { width: 10px; height: 10px; border-radius: 999px; } .ds-code-bar span:nth-child(1) { background: #FF5F57; } .ds-code-bar span:nth-child(2) { background: #FEBC2E; } .ds-code-bar span:nth-child(3) { background: #28C840; } .ds-code-bar strong { margin-left: 12px; border-radius: 6px; background: rgba(255,255,255,0.05); padding: 4px 10px; color: #CBD5E1; font-size: 11px; font-weight: 500; } .ds-code pre { margin: 0; padding: 16px 20px; font-size: 12.5px; line-height: 1.62; } .ds-code .kw { color: #C084FC; } .ds-code .deco { color: #FBBF24; } .ds-code .str { color: #34D399; } .ds-code .fn { color: #22D3EE; }"
+    },
+    {
+      "name": "Surface Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Default light card for feature explanations and diagrams.",
+      "html": "<article class=\"ds-card\"><span class=\"ds-card-icon\">↯</span><h3>Branch-aware runs</h3><p>Every git branch gets its own isolated tables and lineage.</p></article>",
+      "css": ".ds-card { border: 1px solid #DCE7F3; border-radius: 16px; background: #FEFEFF; color: #0F172A; padding: 24px; box-shadow: 0 1px 2px rgba(35, 84, 135, 0.05), 0 10px 28px -12px rgba(35, 84, 135, 0.16); font-family: Inter, ui-sans-serif, system-ui, sans-serif; } .ds-card-icon { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 8px; background: #E0F2FE; color: #2563EB; font-weight: 700; } .ds-card h3 { margin: 16px 0 4px; font-size: 16px; line-height: 1.35; font-weight: 600; } .ds-card p { margin: 0; color: #475569; font-size: 14px; line-height: 1.65; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Flow-Spec Sheet",
+    "overview": "Phlo should feel like a precise technical spec sheet that has learned how to move. The system is bright, quiet, and exact at rest, then uses vivid ribbon colors to explain relationships: branch, check, transform, publish. The dominant impression is not decoration, it is controlled flow.\n\nThis is a brand surface for a developer tool, so the interface must communicate before it transacts. Product artifacts carry the story: code windows, branch labels, status badges, lineage connectors, and open lakehouse stack logos. The surrounding visual system stays clean enough that those artifacts feel trustworthy.\n\nThe system explicitly rejects generic AI SaaS template patterns, over-editorial magazine serif treatment, and decorative flow lines that cross or reduce the readability of important text.",
+    "keyCharacteristics": [
+      "Bright technical surfaces with cool-blue neutral tint.",
+      "Full-palette accents: blue, teal, green, and amber each have a job.",
+      "Flow lines connect product ideas. They do not sit behind text for mood.",
+      "Code and diagrams are first-class brand imagery.",
+      "Spacing is airy, but component interiors stay crisp and operational."
+    ],
+    "rules": [
+      {
+        "name": "The Color Has a Job Rule",
+        "body": "Every saturated color must map to a product concept: blue for action, teal for flow, green for validation, amber for publish. If the color cannot explain its job, remove it.",
+        "section": "colors"
+      },
+      {
+        "name": "The Surface Stays Quiet Rule",
+        "body": "Large areas stay white or cool-blue tinted. The palette becomes vivid in strands, icons, code syntax, and CTAs, not in full-page floods.",
+        "section": "colors"
+      },
+      {
+        "name": "The Brand Font Rule",
+        "body": "Instrument Sans is the display voice because it is part of the Phlo brand board. Do not replace it with editorial serifs, gothic display type, or italic-heavy headline systems.",
+        "section": "typography"
+      },
+      {
+        "name": "The Mono Means Literal Rule",
+        "body": "Monospace is only for code, commands, branches, and machine labels. It is not a generic way to say \"technical.\"",
+        "section": "typography"
+      },
+      {
+        "name": "The Blueprint Edge Rule",
+        "body": "Use a fine border plus soft shadow for structure. Do not rely on dark shadows alone for hierarchy.",
+        "section": "elevation"
+      },
+      {
+        "name": "The Lift Responds Rule",
+        "body": "Hover lift should be small, usually `translateY(-1px)`. Large floating motion makes the page feel like a template.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do use Instrument Sans for display headings and Inter for body text.",
+      "Do use the real Phlo logo asset or a faithful vector from the brand board.",
+      "Do keep large surfaces bright, cool, and readable.",
+      "Do use blue, teal, green, and amber only when each color maps to action, flow, validation, or publish.",
+      "Do use code samples, branch labels, checks, lineage, and stack logos as the core visual material.",
+      "Do keep body copy concise, under 65 to 75 characters per line.",
+      "Do make flow lines connect meaningful objects, such as code to status cards or stages to outputs.",
+      "Do include reduced-motion behavior for any animated flow."
+    ],
+    "donts": [
+      "Don't make Phlo look like a generic AI SaaS template: no decorative gradient blobs, oversized icon-card grids, vague startup copy, or ornamental polish that does not explain the product.",
+      "Don't make Phlo look over-editorial: no magazine-serif identity, gothic display type, broadsheet composition, or italic-heavy headings.",
+      "Don't make Phlo look like internal developer tooling: no dense terminal-first darkness, monochrome dashboards, or technical austerity that hides the warmth and motion of the brand.",
+      "Don't let decorative flow lines cross or reduce the readability of important text.",
+      "Don't use gradient text.",
+      "Don't use glassmorphism as a default card treatment.",
+      "Don't use side-stripe borders greater than `1px` as colored accents.",
+      "Don't use em dashes in interface copy."
+    ]
+  }
+}
