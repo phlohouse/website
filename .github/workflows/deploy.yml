@@ -24,17 +24,20 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: web/package-lock.json
+          cache-dependency-path: web-next/package-lock.json
 
       - run: npm ci
-        working-directory: web
+        working-directory: web-next
 
       - run: npm run build
-        working-directory: web
+        working-directory: web-next
+
+      - run: cp dist/client/index.html dist/client/404.html
+        working-directory: web-next
 
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: web/dist
+          path: web-next/dist/client
 
   deploy:
     needs: build
