@@ -1,4 +1,4 @@
-import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises'
+import { access, mkdir, readFile, readdir, writeFile } from 'node:fs/promises'
 import { dirname, extname, join, relative } from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -19,6 +19,16 @@ const INCLUDE = [
 ]
 
 await mkdir(targetRoot, { recursive: true })
+
+try {
+  await access(sourceRoot)
+} catch (error) {
+  if (error?.code === 'ENOENT') {
+    console.warn(`Skipping docs sync; source not found at ${sourceRoot}`)
+    process.exit(0)
+  }
+  throw error
+}
 
 for (const item of INCLUDE) {
   await copyMarkdown(join(sourceRoot, item), targetRoot)
