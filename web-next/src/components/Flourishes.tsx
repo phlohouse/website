@@ -1,118 +1,24 @@
 // Decorative SVG ribbons + glows that thread through the page sections.
 // All purely presentational, hidden from screen readers.
 
-/* -------------------------------------------------------- HERO RIBBON
- * Watercolor flow inspired by the Phlo brand asset: bright translucent
- * strands of blue → cyan → green → amber sweeping across the viewport,
- * curling into a loop on the right.
- */
 export function HeroRibbon() {
   return (
-    <svg
+    <div
       aria-hidden="true"
-      className="pointer-events-none absolute inset-x-0 top-[58%] -z-10 h-[560px] w-full -translate-y-1/2"
-      viewBox="0 0 1600 640"
-      preserveAspectRatio="xMidYMid slice"
+      className="pointer-events-none absolute inset-x-0 top-[57%] -z-10 h-[520px] -translate-y-1/2 overflow-hidden"
     >
-      <defs>
-        {/* Bright vivid gradient matching the brand ribbon */}
-        <linearGradient
-          id="hero-ribbon"
-          gradientUnits="userSpaceOnUse"
-          x1="0"
-          y1="320"
-          x2="1600"
-          y2="320"
-        >
-          <stop offset="0%" stopColor="#3B82F6" />
-          <stop offset="35%" stopColor="#22D3EE" />
-          <stop offset="60%" stopColor="#22C55E" />
-          <stop offset="85%" stopColor="#FBBF24" />
-          <stop offset="100%" stopColor="#F59E0B" />
-        </linearGradient>
-        <filter id="hero-blur" x="-5%" y="-30%" width="110%" height="160%">
-          <feGaussianBlur stdDeviation="6" />
-        </filter>
-        <filter id="hero-blur-soft" x="-5%" y="-30%" width="110%" height="160%">
-          <feGaussianBlur stdDeviation="2" />
-        </filter>
-      </defs>
-
-      {/* Wide wash, softest and most blurred. Sets the airy backdrop. */}
-      <path
-        d="M -120 380
-           C 280 240, 620 480, 940 360
-           C 1120 300, 1240 240, 1340 260
-           C 1410 275, 1460 320, 1430 360
-           C 1400 400, 1340 400, 1320 360
-           C 1300 320, 1340 295, 1390 315
-           C 1450 340, 1520 360, 1640 340"
-        fill="none"
-        stroke="url(#hero-ribbon)"
-        strokeWidth="120"
-        strokeLinecap="round"
-        opacity="0.08"
-        filter="url(#hero-blur)"
+      <img
+        src="/images/gradient-ribbon-wave.png"
+        alt=""
+        className="absolute left-1/2 top-1/2 h-[360px] w-[135vw] max-w-none -translate-x-1/2 -translate-y-1/2 object-cover object-center opacity-75 mix-blend-multiply"
       />
-
-      {/* Mid strand, the dominant ribbon. */}
-      <path
-        d="M -120 400
-           C 280 260, 620 500, 960 380
-           C 1130 320, 1240 260, 1340 280
-           C 1410 295, 1460 340, 1430 380
-           C 1400 420, 1340 420, 1320 380
-           C 1300 340, 1340 315, 1390 335
-           C 1450 360, 1520 380, 1640 360"
-        fill="none"
-        stroke="url(#hero-ribbon)"
-        strokeWidth="42"
-        strokeLinecap="round"
-        opacity="0.18"
-        filter="url(#hero-blur-soft)"
+      <div
+        className="absolute inset-0 bg-gradient-to-b from-surface via-transparent to-surface/90"
       />
-
-      {/* Crisp accent strand */}
-      <path
-        d="M -120 420
-           C 300 280, 640 510, 980 400
-           C 1140 340, 1240 280, 1340 300
-           C 1410 315, 1460 360, 1430 400
-           C 1400 440, 1340 440, 1320 400
-           C 1300 360, 1340 335, 1390 355
-           C 1450 380, 1520 400, 1640 380"
-        fill="none"
-        stroke="url(#hero-ribbon)"
-        strokeWidth="10"
-        strokeLinecap="round"
-        opacity="0.28"
+      <div
+        className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-surface to-transparent"
       />
-
-      {/* Hair-thin top highlight */}
-      <path
-        d="M -120 440
-           C 320 300, 660 520, 1000 420
-           C 1160 360, 1260 300, 1360 320"
-        fill="none"
-        stroke="url(#hero-ribbon)"
-        strokeWidth="2"
-        strokeLinecap="round"
-        opacity="0.24"
-      />
-
-      {/* Lower secondary wash, very faint */}
-      <path
-        d="M -120 480
-           C 360 380, 720 540, 1100 460
-           C 1280 420, 1420 400, 1640 440"
-        fill="none"
-        stroke="url(#hero-ribbon)"
-        strokeWidth="60"
-        strokeLinecap="round"
-        opacity="0.07"
-        filter="url(#hero-blur)"
-      />
-    </svg>
+    </div>
   )
 }
 

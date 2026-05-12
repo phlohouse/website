@@ -1,0 +1,228 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Phlo Hero Ribbon Variations</title>
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Instrument+Sans:wght@600;700&display=swap");
+      :root {
+        --ink: #0f1b33;
+        --body: #42526a;
+        --line: #d7e2ee;
+        --surface: #eef7ff;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        background: var(--surface);
+        color: var(--ink);
+        font-family: Inter, system-ui, sans-serif;
+      }
+      main {
+        max-width: 1420px;
+        margin: 0 auto;
+        padding: 32px;
+      }
+      h1 {
+        margin: 0;
+        font-family: "Instrument Sans", Inter, sans-serif;
+        font-size: 32px;
+        letter-spacing: 0;
+      }
+      p {
+        margin: 8px 0 0;
+        color: var(--body);
+        line-height: 1.55;
+      }
+      .stack {
+        display: grid;
+        gap: 22px;
+        margin-top: 24px;
+      }
+      .panel {
+        position: relative;
+        overflow: hidden;
+        min-height: 300px;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        background: linear-gradient(180deg, #fff 0%, #fafdff 100%);
+        box-shadow: 0 18px 60px rgba(31, 64, 112, 0.12);
+      }
+      .reference { min-height: 260px; }
+      .reference img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .label {
+        position: absolute;
+        left: 22px;
+        top: 18px;
+        z-index: 10;
+        padding: 8px 10px;
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.76);
+        box-shadow: 0 10px 30px rgba(31, 64, 112, 0.08);
+        backdrop-filter: blur(10px);
+      }
+      .label strong {
+        display: block;
+        font-size: 14px;
+      }
+      .label span {
+        display: block;
+        margin-top: 3px;
+        color: var(--body);
+        font-size: 12px;
+      }
+      svg.ribbon {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+      }
+      .hero-mask {
+        position: absolute;
+        inset: auto 0 0 0;
+        height: 78px;
+        background: linear-gradient(180deg, rgba(255, 255, 255, 0), #fff);
+        opacity: 0.54;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Hero Ribbon Variations</h1>
+      <p>Loop-free SVG options. The PNG loop is beautiful as raster art, but the SVG approximations looked wrong.</p>
+
+      <div class="stack">
+        <section class="panel reference">
+          <div class="label">
+            <strong>Reference PNG</strong>
+            <span>Keep the filled translucent bands. Do not force the loop.</span>
+          </div>
+          <img src="/images/gradient-ribbon-wave.png" alt="Gradient ribbon wave reference" />
+        </section>
+
+        <section class="panel">
+          <div class="label">
+            <strong>01 Long Low Ribbon</strong>
+            <span>Closest useful SVG: blue swell, cyan middle, green rise, amber exit, no loop.</span>
+          </div>
+          <svg class="ribbon" viewBox="0 0 2172 724" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <defs>
+              <linearGradient id="r1" x1="0" y1="360" x2="2172" y2="360" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#4f86ff" stop-opacity="0.08" />
+                <stop offset="17%" stop-color="#2d6df6" stop-opacity="0.6" />
+                <stop offset="42%" stop-color="#77cef2" stop-opacity="0.34" />
+                <stop offset="62%" stop-color="#34c6bd" stop-opacity="0.44" />
+                <stop offset="78%" stop-color="#7ecb45" stop-opacity="0.42" />
+                <stop offset="100%" stop-color="#ffa51a" stop-opacity="0.62" />
+              </linearGradient>
+              <linearGradient id="r1b" x1="0" y1="420" x2="2172" y2="360" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#2f6df7" stop-opacity="0.32" />
+                <stop offset="45%" stop-color="#52d5e9" stop-opacity="0.26" />
+                <stop offset="70%" stop-color="#49c35f" stop-opacity="0.36" />
+                <stop offset="100%" stop-color="#f7ad21" stop-opacity="0.44" />
+              </linearGradient>
+              <filter id="soft1" x="-4%" y="-45%" width="108%" height="190%">
+                <feGaussianBlur stdDeviation="16" />
+              </filter>
+            </defs>
+            <path d="M-100 476 C118 286 330 258 575 342 C772 410 920 458 1095 390 C1268 322 1400 320 1570 402 C1730 480 1890 502 2250 344 L2250 468 C1908 590 1725 550 1555 478 C1400 412 1282 395 1110 462 C910 540 750 488 548 412 C320 326 105 356 -100 612 Z" fill="url(#r1)" />
+            <path d="M-100 542 C150 332 360 326 600 382 C825 434 1015 392 1215 374 C1382 358 1518 424 1698 455 C1865 484 1978 430 2250 368 L2250 445 C1985 522 1870 545 1700 518 C1530 490 1395 426 1228 438 C1020 452 835 510 595 442 C360 374 150 400 -100 632 Z" fill="url(#r1b)" filter="url(#soft1)" opacity="0.82" />
+          </svg>
+          <div class="hero-mask"></div>
+        </section>
+
+        <section class="panel">
+          <div class="label">
+            <strong>02 Off-Canvas Turn</strong>
+            <span>The ribbon begins to curl, but the knot exits the frame before it becomes ugly.</span>
+          </div>
+          <svg class="ribbon" viewBox="0 0 2172 724" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <defs>
+              <linearGradient id="r2" x1="0" y1="360" x2="2172" y2="360" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#558aff" stop-opacity="0.08" />
+                <stop offset="18%" stop-color="#2f6df7" stop-opacity="0.64" />
+                <stop offset="45%" stop-color="#60d4ed" stop-opacity="0.38" />
+                <stop offset="68%" stop-color="#50ca74" stop-opacity="0.5" />
+                <stop offset="100%" stop-color="#ffab1a" stop-opacity="0.66" />
+              </linearGradient>
+              <linearGradient id="r2b" x1="0" y1="430" x2="2172" y2="330" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#2367f2" stop-opacity="0.36" />
+                <stop offset="48%" stop-color="#35cfe1" stop-opacity="0.28" />
+                <stop offset="72%" stop-color="#64be37" stop-opacity="0.44" />
+                <stop offset="100%" stop-color="#f7ad21" stop-opacity="0.48" />
+              </linearGradient>
+              <filter id="soft2" x="-4%" y="-45%" width="108%" height="190%">
+                <feGaussianBlur stdDeviation="15" />
+              </filter>
+            </defs>
+            <path d="M-100 485 C110 282 340 252 590 345 C790 420 935 460 1110 388 C1275 320 1410 306 1590 392 C1720 455 1825 494 1988 464 C2110 442 2190 382 2260 284 L2260 442 C2188 510 2095 552 1970 562 C1810 574 1690 530 1564 472 C1400 398 1280 392 1115 462 C910 548 748 490 548 414 C320 328 105 362 -100 620 Z" fill="url(#r2)" />
+            <path d="M-90 550 C160 328 370 332 610 386 C835 438 1025 392 1225 372 C1398 356 1536 430 1705 466 C1885 504 2048 485 2260 345 L2260 445 C2055 558 1888 575 1705 530 C1535 488 1400 428 1238 438 C1030 450 842 512 602 446 C360 380 158 402 -90 640 Z" fill="url(#r2b)" filter="url(#soft2)" opacity="0.84" />
+          </svg>
+          <div class="hero-mask"></div>
+        </section>
+
+        <section class="panel">
+          <div class="label">
+            <strong>03 Quiet Hero Wash</strong>
+            <span>Same mass, much lower contrast for a real hero background.</span>
+          </div>
+          <svg class="ribbon" viewBox="0 0 2172 724" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <defs>
+              <linearGradient id="r3" x1="0" y1="360" x2="2172" y2="360" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#5a8cff" stop-opacity="0.04" />
+                <stop offset="20%" stop-color="#2f6df7" stop-opacity="0.38" />
+                <stop offset="45%" stop-color="#66d6f0" stop-opacity="0.24" />
+                <stop offset="68%" stop-color="#5bd586" stop-opacity="0.28" />
+                <stop offset="100%" stop-color="#ffb22e" stop-opacity="0.4" />
+              </linearGradient>
+              <filter id="soft3" x="-4%" y="-55%" width="108%" height="210%">
+                <feGaussianBlur stdDeviation="22" />
+              </filter>
+            </defs>
+            <path d="M-120 480 C118 290 328 270 560 342 C770 407 910 455 1095 390 C1270 330 1400 326 1572 405 C1728 476 1898 500 2250 355 L2250 470 C1895 590 1715 548 1558 478 C1405 412 1280 392 1112 455 C910 532 748 488 540 414 C318 335 100 370 -120 610 Z" fill="url(#r3)" filter="url(#soft3)" opacity="0.9" />
+            <path d="M-120 474 C115 286 325 270 560 342 C770 407 910 455 1095 390 C1270 330 1400 326 1572 405 C1728 476 1898 500 2250 355 L2250 432 C1905 535 1738 515 1570 442 C1410 372 1290 370 1110 424 C910 486 760 450 552 388 C325 322 112 342 -120 548 Z" fill="url(#r3)" opacity="0.74" />
+          </svg>
+          <div class="hero-mask"></div>
+        </section>
+
+        <section class="panel">
+          <div class="label">
+            <strong>04 Crossing Bands</strong>
+            <span>Keeps the overlap energy, replaces the bad loop with a flat crossing.</span>
+          </div>
+          <svg class="ribbon" viewBox="0 0 2172 724" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+            <defs>
+              <linearGradient id="r4a" x1="0" y1="360" x2="2172" y2="360" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#4f86ff" stop-opacity="0.08" />
+                <stop offset="18%" stop-color="#2d6df6" stop-opacity="0.6" />
+                <stop offset="45%" stop-color="#70d3ee" stop-opacity="0.34" />
+                <stop offset="70%" stop-color="#4acb65" stop-opacity="0.44" />
+                <stop offset="100%" stop-color="#ffa51a" stop-opacity="0.62" />
+              </linearGradient>
+              <linearGradient id="r4b" x1="1180" y1="490" x2="2172" y2="280" gradientUnits="userSpaceOnUse">
+                <stop offset="0%" stop-color="#21c7c9" stop-opacity="0" />
+                <stop offset="28%" stop-color="#3ec56b" stop-opacity="0.38" />
+                <stop offset="58%" stop-color="#94c83f" stop-opacity="0.42" />
+                <stop offset="100%" stop-color="#f5a623" stop-opacity="0.4" />
+              </linearGradient>
+              <filter id="soft4" x="-4%" y="-45%" width="108%" height="190%">
+                <feGaussianBlur stdDeviation="14" />
+              </filter>
+            </defs>
+            <path d="M-100 480 C120 286 330 258 575 342 C770 408 925 458 1100 390 C1278 322 1410 318 1578 400 C1735 478 1888 500 2250 346 L2250 466 C1908 590 1725 548 1555 478 C1400 410 1280 394 1110 462 C910 542 748 488 550 412 C320 328 104 358 -100 615 Z" fill="url(#r4a)" />
+            <path d="M-100 548 C148 332 360 324 600 382 C832 438 1015 392 1215 374 C1390 358 1528 426 1700 458 C1865 488 1978 432 2250 368 L2250 445 C1982 522 1870 545 1700 518 C1530 490 1396 426 1228 438 C1020 452 835 510 596 442 C360 376 150 400 -100 638 Z" fill="url(#r4a)" filter="url(#soft4)" opacity="0.72" />
+            <path d="M1190 455 C1390 330 1535 362 1712 402 C1880 440 2015 420 2240 302 L2240 390 C2040 488 1880 520 1702 474 C1528 430 1398 400 1190 512 Z" fill="url(#r4b)" opacity="0.88" />
+          </svg>
+          <div class="hero-mask"></div>
+        </section>
+      </div>
+    </main>
+  </body>
+</html>
