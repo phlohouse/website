@@ -52,14 +52,14 @@ function Hero() {
           </p>
           <div className="mt-9 flex flex-wrap items-center gap-3">
             <a
-              href="#docs"
+              href="/docs"
               className="group inline-flex items-center gap-2 rounded-lg bg-brand px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:-translate-y-px hover:bg-brand-deep focus:outline-none focus:ring-2 focus:ring-brand/30"
             >
               Read the docs
               <ArrowRight />
             </a>
             <a
-              href="#get-started"
+              href="/docs/getting-started"
               className="inline-flex items-center gap-2 rounded-lg border border-line bg-white/90 px-5 py-3 text-sm font-semibold text-ink shadow-card backdrop-blur transition hover:-translate-y-px hover:shadow-elev focus:outline-none focus:ring-2 focus:ring-brand/20"
             >
               Get started
@@ -315,25 +315,25 @@ function LearningResources() {
     {
       title: 'Getting started',
       desc: 'Install phlo, add the packages you need, start services, and materialize the first pipeline.',
-      href: '/blog/02-setup-guide',
+      href: '/docs/getting-started',
       label: 'Guide 01',
     },
     {
       title: 'Plugin system',
       desc: 'How to build custom sources, quality checks, transformations, and services for Phlo.',
-      href: '/blog/14-plugin-system',
+      href: '/guides/plugin-development',
       label: 'Guide 02',
     },
     {
       title: 'Custom packages',
       desc: 'How teams package domain assets, resources, services, and reusable integration logic.',
-      href: '/blog/16-building-custom-packages',
+      href: '/guides/service-packages',
       label: 'Guide 03',
     },
     {
       title: 'Observatory extensions',
       desc: 'How packages add routes, dashboard slots, settings, and UI modules to Observatory.',
-      href: '/blog/15-observatory-extensions',
+      href: '/packages/phlo-observatory',
       label: 'Guide 04',
     },
   ]
@@ -406,14 +406,14 @@ function FinalCTA() {
               </p>
               <div className="mt-8 flex flex-wrap items-center gap-3">
                 <a
-                  href="#install"
+                  href="/docs/getting-started/installation"
                   className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-ink shadow transition hover:bg-slate-100"
                 >
                   Install Phlo
                   <ArrowRight />
                 </a>
                 <a
-                  href="#docs"
+                  href="/docs"
                   className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-6 py-3 text-sm font-medium text-white backdrop-blur transition hover:bg-white/10"
                 >
                   Read the docs

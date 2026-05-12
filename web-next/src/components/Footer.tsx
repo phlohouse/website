@@ -1,23 +1,26 @@
+import { Link } from '@tanstack/react-router'
+import type { ReactNode } from 'react'
 import { PhloLogo } from './PhloLogo'
+import { RoutedLink } from './RoutedLink'
 
 const LINKS = {
   Product: [
-    { label: 'Overview', href: '#product' },
-    { label: 'Workflow', href: '#product' },
-    { label: 'Architecture', href: '#docs' },
-    { label: 'Guides', href: '#guides' },
+    { label: 'Overview', href: '/#product' },
+    { label: 'Workflow', href: '/#product' },
+    { label: 'Architecture', href: '/guides/developer-guide' },
+    { label: 'Guides', href: '/guides' },
   ],
   Developers: [
-    { label: 'Docs', href: '#docs' },
-    { label: 'API reference', href: '#docs' },
-    { label: 'Blog', href: '#guides' },
+    { label: 'Docs', href: '/docs' },
+    { label: 'API reference', href: '/reference' },
+    { label: 'Packages', href: '/packages' },
     { label: 'GitHub', href: 'https://github.com/phlohouse' },
   ],
   Resources: [
-    { label: 'Getting started', href: '/blog/02-setup-guide' },
-    { label: 'Plugin system', href: '/blog/14-plugin-system' },
-    { label: 'Custom packages', href: '/blog/16-building-custom-packages' },
-    { label: 'Observatory extensions', href: '/blog/15-observatory-extensions' },
+    { label: 'Getting started', href: '/docs/getting-started' },
+    { label: 'Plugin system', href: '/guides/plugin-development' },
+    { label: 'Custom packages', href: '/guides/service-packages' },
+    { label: 'Observatory extensions', href: '/packages/phlo-observatory' },
   ],
 } as const
 
@@ -54,12 +57,9 @@ export function Footer() {
               <ul className="mt-4 space-y-2.5">
                 {items.map((item) => (
                   <li key={item.label}>
-                    <a
-                      href={item.href}
-                      className="text-sm text-body transition-colors hover:text-ink"
-                    >
+                    <FooterLink href={item.href}>
                       {item.label}
-                    </a>
+                    </FooterLink>
                   </li>
                 ))}
               </ul>
@@ -90,6 +90,29 @@ export function Footer() {
         </div>
       </div>
     </footer>
+  )
+}
+
+function FooterLink({
+  href,
+  children,
+}: {
+  href: string
+  children: ReactNode
+}) {
+  const className = 'text-sm text-body transition-colors hover:text-ink'
+  if (href.startsWith('/')) {
+    return (
+      <RoutedLink to={href} className={className}>
+        {children}
+      </RoutedLink>
+    )
+  }
+
+  return (
+    <a href={href} className={className}>
+      {children}
+    </a>
   )
 }
 

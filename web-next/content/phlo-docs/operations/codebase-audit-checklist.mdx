@@ -1,0 +1,199 @@
+# Codebase Audit Checklist
+
+Use this checklist for full-repo health audits across core runtime, packages, docs, CI, and release flow.
+
+## 1. Repository Hygiene
+
+- [ ] Remove local artifacts (`.DS_Store`, `__pycache__`, `*.pyc`, temp files, logs).
+- [ ] Verify `.gitignore` covers generated Python/Node/dbt/docs outputs.
+- [ ] Remove orphan files not referenced by code, tests, docs, or CI.
+- [ ] Identify duplicate docs/scripts and consolidate.
+- [ ] Keep files below ~500 LOC where practical.
+- [ ] Verify top-level layout stays aligned: `src/`, `packages/`, `tests/`, `docs/`, `registry/`, `scripts/`.
+
+Commands:
+
+```bash
+find . -type f \( -name '.DS_Store' -o -name '*.pyc' -o -name '*.log' -o -name '*.tmp' \)
+git ls-files | rg '\.DS_Store$|__pycache__|\.pyc$'
+```
+
+## 2. Package Integrity (Monorepo)
+
+- [ ] Every package has `pyproject.toml`.
+- [ ] Every package has `src/`.
+- [ ] Every package has `tests/` (unless explicitly exempted).
+- [ ] Every package has `README.md` (unless explicitly exempted).
+- [ ] Service-providing packages include `service.yaml`.
+- [ ] Package metadata is consistent (name/version/python-requires/license).
+
+Commands:
+
+```bash
+for p in packages/*; do
+  test -f "$p/pyproject.toml" || echo "missing pyproject: $p"
+  test -d "$p/src" || echo "missing src: $p"
+  test -d "$p/tests" || echo "missing tests: $p"
+  test -f "$p/README.md" || echo "missing readme: $p"
+done
+```
+
+## 3. Redundant / Dead Code
+
+- [ ] Remove deprecated paths already migrated.
+- [ ] Resolve or ticket all `TODO|FIXME|HACK` in production code paths.
+- [ ] Collapse repeated logic into shared helpers.
+- [ ] Remove unused modules, functions, and config knobs.
+- [ ] Eliminate duplicate test fixtures/utilities.
+
+Commands:
+
+```bash
+rg -n "TODO|FIXME|HACK|deprecated|DEPRECATED" src packages tests docs .github
+```
+
+## 4. Core Runtime (`src/phlo/`)
+
+- [ ] Clear boundaries: config, CLI, plugin discovery, operations, hooks.
+- [ ] Explicit failures over hidden fallbacks.
+- [ ] Consistent exception taxonomy and error messages.
+- [ ] Absolute imports only.
+- [ ] Stable plugin-facing contracts and schemas.
+- [ ] Structured logging consistency.
+
+## 5. CLI Audit
+
+- [ ] Every command has clear help + deterministic behavior.
+- [ ] Consistent non-zero exit codes on failure.
+- [ ] Idempotent service lifecycle commands.
+- [ ] Strict argument validation.
+- [ ] No drift between CLI docs and actual command behavior.
+- [ ] Regression tests for prior CLI bugs.
+
+Commands:
+
+```bash
+uv run pytest tests/test_cli_services.py tests/test_cli_plugin.py tests/test_cli_workflow.py
+```
+
+## 6. Plugin System Audit
+
+- [ ] Validate discovery from entry points, local packages, and registry data.
+- [ ] Handle duplicate plugin names and conflicts explicitly.
+- [ ] Validate plugin install/update/check/search/list commands.
+- [ ] Ensure registry schema and data remain compatible.
+- [ ] Cover malformed plugin metadata + import failures in tests.
+
+Commands:
+
+```bash
+uv run pytest tests/test_plugin_system.py tests/test_plugin_registry.py tests/test_services_discovery.py
+```
+
+## 7. Services / Infra Contracts
+
+- [ ] Port defaults in docs match package `service.yaml` defaults.
+- [ ] Health checks cover all documented services/profiles.
+- [ ] Startup dependency order is explicit and tested.
+- [ ] `phlo services list --json` contract stable.
+- [ ] No unsupported command references in docs (`phlo services open`, etc.).
+
+Commands:
+
+```bash
+uv run pytest tests/test_core_service_autoconfig.py tests/test_infrastructure_config.py
+```
+
+## 8. Data Workflow Path (DLT + dbt + Dagster + Quality)
+
+- [ ] Ingestion decorator behavior validated for schema + metadata columns.
+- [ ] Pandera quality checks deterministic and documented.
+- [ ] dbt compile/run/test integration validated.
+- [ ] Dagster asset + sensor + quality check bridging validated.
+- [ ] Iceberg/Nessie/Trino integration tested under real service mode.
+- [ ] Naming conventions enforced (snake_case assets, lowercase db objects).
+
+## 9. Test Strategy / Coverage
+
+- [ ] Unit vs integration boundaries are clear.
+- [ ] Integration tests consistently marked (`pytest.mark.integration`).
+- [ ] CI ignore list justified and reviewed regularly.
+- [ ] E2E golden path exists and is runnable.
+- [ ] Bug fixes include regression tests where applicable.
+- [ ] Tests isolated and deterministic.
+
+Commands:
+
+```bash
+uv run pytest -m "not integration"
+uv run pytest -m integration
+```
+
+## 10. Lint / Format / Type
+
+- [ ] `ruff check` clean.
+- [ ] `ruff format --check` clean.
+- [ ] `ty check` clean for core + packages.
+- [ ] Avoid untracked `type: ignore` usage.
+- [ ] Keep strict types at package boundaries.
+
+Commands:
+
+```bash
+uv run ruff check .
+uv run ruff format --check .
+uv run ty check
+```
+
+## 11. Observability & Logging
+
+- [ ] Structured logs used consistently.
+- [ ] Correlation fields present for cross-service tracing.
+- [ ] No secret leakage in logs.
+- [ ] Error logs include operator-actionable remediation.
+- [ ] Metrics/alerts cover data quality and service downtime.
+
+## 12. Security / Dependency / Supply Chain
+
+- [ ] Dependency age and vulnerability review (Python + Node).
+- [ ] Secrets scanning in repo and CI.
+- [ ] Least-privilege GitHub Actions permissions.
+- [ ] Trusted publishing path verified.
+- [ ] All external HTTP calls have timeout/retry behavior.
+
+## 13. Performance / Scale Readiness
+
+- [ ] Identify expensive loops and repeated I/O.
+- [ ] Pagination or limits for large list operations.
+- [ ] Batch writes where possible.
+- [ ] Concurrency safety around shared resources.
+- [ ] Cache strategy + invalidation documented.
+
+## 14. Docs / DX
+
+- [ ] User docs match current command behavior.
+- [ ] Service ports/paths match current package defaults.
+- [ ] Blog post structure requirements satisfied.
+- [ ] Expected output blocks present in command snippets/diagrams.
+- [ ] Architecture decisions updated when behavior changes.
+
+Commands:
+
+```bash
+mkdocs build
+```
+
+## 15. CI/CD & Release
+
+- [ ] Local `make check` aligns with CI gates.
+- [ ] CI Python/Node versions match support matrix.
+- [ ] Release/publish workflows validated.
+- [ ] Publish plan script behavior tested with change scenarios.
+- [ ] Ignore-lists and skipped jobs documented with rationale.
+
+Commands:
+
+```bash
+make check
+gh run list --limit 20
+```
