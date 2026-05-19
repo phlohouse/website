@@ -10,4 +10,4 @@ logs:
 	pm2 logs phlo-web
 
 build:
-	cd web && npm run build
+	cd web-next && npm run build
