@@ -5,8 +5,7 @@
   "private": true,
   "scripts": {
     "dev": "vite dev",
-    "sync:docs": "node scripts/sync-docs.mjs",
-    "build": "npm run sync:docs && vite build",
+    "build": "vite build",
     "start": "node .output/server/index.mjs"
   },
   "dependencies": {
