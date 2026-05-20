@@ -465,7 +465,7 @@ HTTP 401 Unauthorized
    ```bash
    TOKEN=$(curl -s -X POST http://localhost:10018/rpc/login \
      -H "Content-Type: application/json" \
-     -d '{"username": "analyst", "password": "analyst123"}' | jq -r '.access_token')
+     -d '&#123;"username": "analyst", "password": "analyst123"&#125;' | jq -r '.access_token')
    ```
 
 3. **Verify token structure:**

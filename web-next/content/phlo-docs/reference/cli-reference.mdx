@@ -105,7 +105,7 @@ phlo minio               # MinIO client and admin helpers
 phlo postgres            # PostgreSQL shell and maintenance
 phlo trino               # Trino shell and queries
 phlo dbt                 # dbt compile/run/test helpers
-phlo publishing          # dbt publishing layer
+phlo dbt publishing      # dbt publishing layer
 phlo metrics             # Metrics summary (built-in)
 phlo alerts              # Alerting rules
 phlo openmetadata        # OpenMetadata catalog
@@ -507,7 +507,7 @@ phlo services list --json
 
 ```bash
 phlo services list --json
-# Error: Failed to discover services. Verify service plugins are installed and run `phlo plugins list` for diagnostics.
+# Error: Failed to discover services. Verify service plugins are installed and run `phlo plugin list` for diagnostics.
 ```
 
 ### phlo services ports
@@ -854,7 +854,7 @@ phlo plugin install PLUGIN_NAME [OPTIONS]
 phlo plugin install phlo-superset
 
 # Install specific version
-phlo plugin install phlo-superset==0.2.0
+phlo plugin install phlo-superset==0.2.5
 ```
 
 ### phlo plugin info
@@ -1308,6 +1308,26 @@ phlo schema-migrate history warehouse.customers --limit 5
 
 For end-to-end spec authoring and execution workflow, see
 [Data Migrations Guide](../guides/data-migrations.md).
+
+### phlo migrate decorators-2026-05
+
+Migrate legacy Phlo decorator usage to the May 2026 API style.
+
+```bash
+phlo migrate decorators-2026-05 PATH [OPTIONS]
+```
+
+This codemod rewrites supported legacy usage such as `@phlo_ingestion(...)`,
+`@phlo.ingestion(...)`, and `@phlo_quality(...)` to the explicit May 2026
+decorator calls, such as `@phlo.ingest.dlt(...)` and `@phlo.quality.pandera(...)`.
+
+**Options**:
+
+```bash
+--check                 # Fail if migrations are needed
+--write                 # Rewrite files in place
+--diff                  # Print unified diffs for pending changes
+```
 
 ### phlo migrate validate
 
@@ -1999,7 +2019,7 @@ Hasura GraphQL engine management.
 
 **Installation**: `phlo plugin install phlo-hasura`
 
-### phlo publishing
+### phlo dbt publishing
 
 dbt publishing layer management.
 
@@ -2029,16 +2049,16 @@ CLI behavior can be customized with environment variables:
 
 ```bash
 # Dagster home directory
-
+export DAGSTER_HOME=~/.dagster
 
 # Workspace YAML location
-
+export DAGSTER_WORKSPACE=/path/to/workspace.yaml
 
 # Phlo configuration
-
+export PHLO_CONFIG=/path/to/phlo.yaml
 
 # Log level
-
+export PHLO_LOG_LEVEL=DEBUG
 ```
 
 ## Exit Codes

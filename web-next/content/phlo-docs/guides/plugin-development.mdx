@@ -307,7 +307,7 @@ class MyAPISource(SourceConnectorPlugin):
 ```python
 """REST API source connector plugin."""
 
-
+import requests
 from typing import Any, Iterator
 from phlo.plugins.base import SourceConnectorPlugin, PluginMetadata
 
@@ -470,7 +470,7 @@ Quality check plugins implement custom validation logic.
 ```python
 from phlo.plugins.base import QualityCheckPlugin, PluginMetadata
 from typing import Any
-
+import pandas as pd
 
 
 class MyQualityCheck(QualityCheckPlugin):
@@ -530,7 +530,7 @@ class CheckInstance:
 ```python
 """Business rule validation plugin."""
 
-
+import pandas as pd
 from typing import Any, Callable
 from phlo.plugins.base import QualityCheckPlugin, PluginMetadata
 
@@ -634,7 +634,7 @@ class BusinessRuleCheck:
 
 ```python
 from phlo.plugins import get_quality_check
-
+import pandas as pd
 
 # Get the plugin
 plugin = get_quality_check("business_rule")
@@ -688,7 +688,7 @@ phlo-mydb/
 """MyDB service plugin."""
 
 from phlo.plugins.base import ServicePlugin, PluginMetadata
-
+import importlib.resources
 
 
 class MyDBServicePlugin(ServicePlugin):
@@ -824,7 +824,7 @@ def validate_config(self, config: dict[str, Any]) -> bool:
 ```python
 """Test suite for source connector."""
 
-
+import pytest
 from phlo_my_api.plugin import MyAPISource
 
 

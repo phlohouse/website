@@ -231,11 +231,11 @@ Restrict data access based on JWT claims.
    - **Row select permissions:** Custom check
    - Enter condition:
    ```json
-   {
-     "user_id": {
+   &#123;
+     "user_id": &#123;
        "_eq": "X-Hasura-User-Id"
-     }
-   }
+     &#125;
+   &#125;
    ```
 3. Save
 
@@ -326,7 +326,7 @@ Client will receive updates when data changes.
 **JavaScript client:**
 
 ```javascript
-
+import { createClient } from "graphql-ws";
 
 const client = createClient({
   url: "ws://localhost:8081/v1/graphql",

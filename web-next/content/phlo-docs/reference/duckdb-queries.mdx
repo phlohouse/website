@@ -63,7 +63,7 @@ D SET s3_secret_access_key = 'minio123';
 ### Option 2: Python Script Configuration
 
 ```python
-
+import duckdb
 
 # Create connection
 conn = duckdb.connect()
@@ -84,15 +84,15 @@ conn.execute("SET s3_secret_access_key = 'minio123'")
 
 ```bash
 # Set environment variables
-
-
-
-
-
+export S3_ENDPOINT=localhost:10001
+export S3_USE_SSL=false
+export S3_URL_STYLE=path
+export AWS_ACCESS_KEY_ID=minio
+export AWS_SECRET_ACCESS_KEY=minio123
 ```
 
 ```python
-
+import duckdb
 
 conn = duckdb.connect()
 conn.execute("INSTALL iceberg")
@@ -222,8 +222,8 @@ COPY (
 ### Pandas Integration
 
 ```python
-
-
+import duckdb
+import pandas as pd
 
 # Configure connection
 conn = duckdb.connect()
@@ -250,8 +250,8 @@ print(df.describe())
 
 ```python
 # In Jupyter notebook
-
-
+import duckdb
+import plotly.express as px
 
 # Setup
 conn = duckdb.connect()

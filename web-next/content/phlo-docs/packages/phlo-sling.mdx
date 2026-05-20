@@ -37,6 +37,32 @@ def replicate_users(context):
     pass
 ```
 
+## Helper Utilities
+
+`phlo-sling` exposes small helpers for common replication authoring tasks:
+
+```python
+from phlo_sling import build_partition_where, build_replication_plan, summarize_connections
+
+where = build_partition_where("updated_at", "2026-05-01", "2026-05-02")
+plan = build_replication_plan(
+    ["lims.samples", "lims.results"],
+    source_conn="LIMS",
+    target_conn="PHLO_ICEBERG",
+    update_key="updated_at",
+    where=where,
+)
+
+connections = summarize_connections()
+```
+
+| Helper | Purpose |
+| --- | --- |
+| `build_partition_where` | Build a half-open source window predicate. |
+| `table_name_from_stream` | Derive stable target names from stream names. |
+| `build_replication_plan` | Build `SlingReplication` objects from stream names or mappings. |
+| `summarize_connections` | Display non-secret Sling connection summaries. |
+
 ## Decorators
 
 ### `@phlo_sling_replication`
@@ -110,24 +136,24 @@ Configure source connections using environment variables with the connection nam
 
 ```bash
 # PostgreSQL source (for source_conn="POSTGRES")
-
-
-
-
-
+export POSTGRES_HOST=localhost
+export POSTGRES_PORT=5432
+export POSTGRES_USER=admin
+export POSTGRES_PASSWORD=secret
+export POSTGRES_DATABASE=production
 
 # Or for source_conn="PHLO_POSTGRES"
-
-
-
-
-
+export PHLO_POSTGRES_HOST=localhost
+export PHLO_POSTGRES_PORT=5432
+export PHLO_POSTGRES_USER=admin
+export PHLO_POSTGRES_PASSWORD=secret
+export PHLO_POSTGRES_DATABASE=production
 
 # S3 target (via MinIO) for source_conn="S3"
-
-
-
-
+export S3_ENDPOINT=localhost:9000
+export S3_ACCESS_KEY=minioadmin
+export S3_SECRET_KEY=minioadmin
+export S3_BUCKET=my-bucket
 ```
 
 ## Replication Modes

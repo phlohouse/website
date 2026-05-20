@@ -37,7 +37,7 @@ An **asset** is a piece of data that you want to create and maintain.
 ### Your First Asset
 
 ```python
-
+import dagster as dg
 
 @dg.asset
 def my_first_asset():
@@ -288,7 +288,7 @@ Resources are automatically injected by Dagster!
 
 ```python
 from dagster import ConfigurableResource
-
+import requests
 
 class WeatherAPIResource(ConfigurableResource):
     """Resource for weather API."""
@@ -542,7 +542,7 @@ freshness_checks = build_last_update_freshness_checks(
 Use Pandera for schema validation:
 
 ```python
-
+import pandera as pa
 from pandera.typing import Series
 from dagster_pandera import pandera_schema_to_dagster_type
 
@@ -902,7 +902,7 @@ def iceberg_io_manager(iceberg: IcebergResource):
 
    ```python
    # Check partition exists
-   context.log.info(f"Partition: {context.partition_key}")
+   context.log.info(f"Partition: &#123;context.partition_key&#125;")
    ```
 
 2. Partition dependency mismatch:

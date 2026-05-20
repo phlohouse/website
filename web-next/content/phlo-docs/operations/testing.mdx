@@ -50,8 +50,8 @@ Unit tests are **fast** (&lt; 1 second), require **no Docker**, and test individ
 Test that your schema validates data correctly:
 
 ```python
-
-
+import pytest
+import pandas as pd
 from workflows.schemas.weather import RawWeatherData
 
 def test_valid_weather_data_passes_validation():
@@ -118,7 +118,7 @@ def test_schema_has_required_fields():
 Verify decorator parameters:
 
 ```python
-
+import inspect
 from workflows.ingestion.weather.observations import weather_observations
 
 def test_asset_has_correct_table_name():
@@ -214,7 +214,7 @@ Test Iceberg table operations in-memory using DuckDB backend.
 from phlo_testing import mock_iceberg_catalog
 from phlo_iceberg.schema_conversion import pandera_to_iceberg
 from workflows.schemas.weather import RawWeatherData
-
+import pandas as pd
 
 def test_iceberg_operations():
     """Test Iceberg table operations locally."""
@@ -451,7 +451,7 @@ docker ps
 Test full asset execution:
 
 ```python
-
+import pytest
 
 @pytest.mark.integration  # Mark as integration test
 def test_weather_asset_materialization():
@@ -599,8 +599,8 @@ tests/
 ```python
 """Pytest configuration and shared fixtures."""
 
-
-
+import pytest
+import pandas as pd
 
 
 def pytest_configure(config):
@@ -834,7 +834,7 @@ def test_asset_decorator_configuration():
 pip install -e .
 
 # Or set PYTHONPATH
-
+export PYTHONPATH=/home/user/phlo/src:$PYTHONPATH
 ```
 
 ### Schema Validation Failures
