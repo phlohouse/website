@@ -492,12 +492,12 @@ iptables -A INPUT -p tcp --dport 10006 -j DROP
 
 ```bash
 # AWS Secrets Manager
-
+export POSTGRES_PASSWORD=$(aws secretsmanager get-secret-value \
   --secret-id phlo/postgres/password \
   --query SecretString --output text)
 
 # HashiCorp Vault
-
+export POSTGRES_PASSWORD=$(vault kv get -field=password secret/phlo/postgres)
 ```
 
 **Docker secrets**:

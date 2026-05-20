@@ -112,7 +112,7 @@ Create a new file: `workflows/schemas/weather.py`
 ```python
 """Schema definitions for weather data."""
 
-
+import pandera as pa
 from pandera.typing import Series
 from datetime import datetime
 
@@ -258,15 +258,15 @@ Create: `workflows/ingestion/weather_assets.py`
 
 from __future__ import annotations
 
-
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 from typing import Any
 
-
-
-
-
+import dagster as dg
+import dlt
+import os
+import requests
 
 from phlo_iceberg.settings import get_settings as get_iceberg_settings
 from phlo_iceberg.resource import IcebergResource
@@ -1055,8 +1055,8 @@ Create: `workflows/quality/weather.py`
 ```python
 """Data quality checks for weather pipeline."""
 
-
-
+import dagster as dg
+import pandas as pd
 from dagster_pandera import pandera_schema_to_dagster_type
 
 from workflows.schemas.weather import WeatherObservationSchema, WeatherReadingSchema

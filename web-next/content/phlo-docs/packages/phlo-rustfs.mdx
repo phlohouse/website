@@ -73,7 +73,7 @@ aws --endpoint-url http://localhost:9000 s3 cp data.parquet s3://lake/stage/
 ### Python (boto3)
 
 ```python
-
+import boto3
 
 s3 = boto3.client(
     's3',

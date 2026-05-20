@@ -40,10 +40,10 @@ This keeps backend routing outside workflow code:
 Typical Phlo OTLP environment:
 
 ```bash
-
-
-
-
+export OTEL_EXPORTER_OTLP_ENDPOINT=http://localhost:4317
+export OTEL_TRACES_EXPORTER=otlp
+export OTEL_METRICS_EXPORTER=otlp
+export OTEL_LOGS_EXPORTER=otlp
 ```
 
 ## Quick Start

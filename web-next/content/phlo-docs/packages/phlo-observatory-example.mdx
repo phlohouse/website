@@ -261,15 +261,15 @@ Extensions provide JavaScript modules that export registration functions:
 
 ```javascript
 // observatory_assets/example.js
-
+export function registerRoutes(router) {
   router.addRoute('/extensions/example', ExampleDashboard);
 }
 
-
+export function registerDashboardSlot(container) {
   container.mount(ExampleWidget);
 }
 
-
+export function registerSettings(container) {
   container.mount(SettingsPanel);
 }
 ```

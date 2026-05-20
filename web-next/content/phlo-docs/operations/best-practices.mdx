@@ -226,7 +226,7 @@ class Config(BaseSettings):
 **Use Pandera:**
 
 ```python
-
+import pandera as pa
 
 class OrderSchema(pa.DataFrameModel):
     order_id: Series[str] = pa.Field(unique=True)
@@ -593,7 +593,7 @@ Monitor key metrics:
 
 ```python
 # tests/test_transformations.py
-
+import pytest
 from phlo.utils.transformations import calculate_tax
 
 def test_calculate_tax():
